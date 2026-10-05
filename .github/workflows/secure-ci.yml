@@ -220,6 +220,7 @@ jobs:
           CERTIFICATE_IDENTITY: https://github.com/${{ github.repository }}/.github/workflows/secure-ci.yml@.*
           OIDC_ISSUER: https://token.actions.githubusercontent.com
         run: |
+          set -o pipefail
           cosign verify \
             --certificate-identity-regexp "$CERTIFICATE_IDENTITY" \
             --certificate-oidc-issuer "$OIDC_ISSUER" \
@@ -234,6 +235,7 @@ jobs:
           CERTIFICATE_IDENTITY: https://github.com/${{ github.repository }}/.github/workflows/secure-ci.yml@.*
           OIDC_ISSUER: https://token.actions.githubusercontent.com
         run: |
+          set -o pipefail
           cosign verify-attestation --type cyclonedx \
             --certificate-identity-regexp "$CERTIFICATE_IDENTITY" \
             --certificate-oidc-issuer "$OIDC_ISSUER" \
@@ -248,6 +250,7 @@ jobs:
           DIGEST: ${{ needs.build-sign.outputs.digest }}
           OWNER: ${{ github.repository_owner }}
         run: |
+          set -o pipefail
           gh attestation verify "oci://$IMAGE@$DIGEST" --owner "$OWNER" | tee provenance-verify.txt
 
       - name: Record verification results
@@ -259,6 +262,9 @@ jobs:
           SBOM_RESULT: ${{ steps.verify-sbom.outcome }}
           PROVENANCE_RESULT: ${{ steps.verify-provenance.outcome }}
         run: |
+          echo "SIGNATURE_RESULT: $SIGNATURE_RESULT"
+          echo "SBOM_RESULT: $SBOM_RESULT"
+          echo "PROVENANCE_RESULT: $PROVENANCE_RESULT"
           printf '{\n  "skip_sign": %s,\n  "skip_provenance": %s,\n  "signature_verification": "%s",\n  "sbom_verification": "%s",\n  "provenance_verification": "%s"\n}\n' \
             "$SKIP_SIGN" "$SKIP_PROVENANCE" "$SIGNATURE_RESULT" "$SBOM_RESULT" "$PROVENANCE_RESULT" \
             > verification.json
