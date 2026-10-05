@@ -213,6 +213,7 @@ jobs:
 
       - name: Verify image signature
         id: verify-signature
+        if: always()
         env:
           IMAGE: ${{ needs.build-sign.outputs.image }}
           DIGEST: ${{ needs.build-sign.outputs.digest }}
@@ -226,6 +227,7 @@ jobs:
 
       - name: Verify SBOM attestation
         id: verify-sbom
+        if: always()
         env:
           IMAGE: ${{ needs.build-sign.outputs.image }}
           DIGEST: ${{ needs.build-sign.outputs.digest }}
@@ -239,7 +241,7 @@ jobs:
 
       - name: Verify build provenance
         id: verify-provenance
-        if: ${{ inputs.skip_provenance != true }}
+        if: always()
         env:
           GH_TOKEN: ${{ github.token }}
           IMAGE: ${{ needs.build-sign.outputs.image }}
@@ -272,3 +274,26 @@ jobs:
             provenance-verify.txt
             verification.json
           if-no-files-found: warn
+
+          
+      - name: Fail if any verification failed
+        if: always()
+        env:
+          SIGNATURE_RESULT: ${{ steps.verify-signature.outcome }}
+          SBOM_RESULT: ${{ steps.verify-sbom.outcome }}
+          PROVENANCE_RESULT: ${{ steps.verify-provenance.outcome }}
+        run: |
+          if [ "$SIGNATURE_RESULT" != "success" ]; then
+            echo "Image signature verification failed."
+            exit 1
+          fi
+
+          if [ "$SBOM_RESULT" != "success" ]; then
+            echo "SBOM attestation verification failed."
+            exit 1
+          fi
+
+          if [ "$PROVENANCE_RESULT" != "success" ]; then
+            echo "Build provenance verification failed."
+            exit 1
+          fi
