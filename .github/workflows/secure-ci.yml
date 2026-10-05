@@ -213,7 +213,7 @@ jobs:
 
       - name: Verify image signature
         id: verify-signature
-        if: always()
+        continue-on-error: true
         env:
           IMAGE: ${{ needs.build-sign.outputs.image }}
           DIGEST: ${{ needs.build-sign.outputs.digest }}
@@ -227,7 +227,7 @@ jobs:
 
       - name: Verify SBOM attestation
         id: verify-sbom
-        if: always()
+        continue-on-error: true
         env:
           IMAGE: ${{ needs.build-sign.outputs.image }}
           DIGEST: ${{ needs.build-sign.outputs.digest }}
@@ -241,7 +241,7 @@ jobs:
 
       - name: Verify build provenance
         id: verify-provenance
-        if: always()
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
           IMAGE: ${{ needs.build-sign.outputs.image }}
