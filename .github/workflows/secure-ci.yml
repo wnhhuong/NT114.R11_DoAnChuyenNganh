@@ -213,7 +213,6 @@ jobs:
 
       - name: Verify image signature
         id: verify-signature
-        if: ${{ inputs.skip_sign != true }}
         env:
           IMAGE: ${{ needs.build-sign.outputs.image }}
           DIGEST: ${{ needs.build-sign.outputs.digest }}
