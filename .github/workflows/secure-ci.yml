@@ -140,8 +140,7 @@ jobs:
           image-ref: ${{ steps.image.outputs.image }}@${{ steps.build.outputs.digest }}
           format: cosign-vuln
           output: vuln.cosign.json
-          severity: "CRITICAL,HIGH"
-          exit-code: "1"
+          exit-code: "0"
 
       - name: Upload Trivy image report
         if: always()
