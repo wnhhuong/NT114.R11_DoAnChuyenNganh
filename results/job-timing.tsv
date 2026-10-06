@@ -1,0 +1,41 @@
+run_id	job	seconds
+37434389227	Code and secret scan	29
+37434389227	Dependency scan	25
+37434389227	Build, scan, sign, and attest image	106
+37434389227	Verify image evidence	19
+37324185747	Dependency scan	11
+37324185747	Code and secret scan	35
+37324185747	Build, scan, sign, and attest image	122
+37324185747	Verify image evidence	16
+37323537855	Dependency scan	9
+37323537855	Code and secret scan	29
+37323537855	Build, scan, sign, and attest image	115
+37323537855	Verify image evidence	16
+37313965396	Dependency scan	11
+37313965396	Code and secret scan	34
+37313965396	Build, scan, sign, and attest image	103
+37313965396	Verify image evidence	19
+37312826464	Code and secret scan	33
+37312826464	Dependency scan	17
+37312826464	Build, scan, sign, and attest image	112
+37312826464	Verify image evidence	19
+37312233494	Code and secret scan	27
+37312233494	Dependency scan	13
+37312233494	Build, scan, sign, and attest image	123
+37312233494	Verify image evidence	21
+37311343482	Code and secret scan	30
+37311343482	Dependency scan	10
+37311343482	Build, scan, sign, and attest image	116
+37311343482	Verify image evidence	14
+37310703248	Dependency scan	13
+37310703248	Code and secret scan	31
+37310703248	Build, scan, sign, and attest image	95
+37310703248	Verify image evidence	16
+37309750702	Code and secret scan	32
+37309750702	Dependency scan	13
+37309750702	Build, scan, sign, and attest image	93
+37309750702	Verify image evidence	20
+37308197725	Dependency scan	14
+37308197725	Code and secret scan	37
+37308197725	Build, scan, sign, and attest image	115
+37308197725	Verify image evidence	21
