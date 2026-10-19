@@ -5,8 +5,9 @@ plugins {
 }
 
 ext {
-	set('tomcat.version', '11.0.25')
-	set('jackson-bom.version', '3.1.7')
+	// Mặc định là bản đã vá. Kịch bản test truyền -PtomcatVersion=11.0.24 -PjacksonVersion=3.1.5
+	set('tomcat.version', project.findProperty('tomcatVersion') ?: '11.0.25')
+	set('jackson-bom.version', project.findProperty('jacksonVersion') ?: '3.1.7')
 }
 
 group = 'com.example'
