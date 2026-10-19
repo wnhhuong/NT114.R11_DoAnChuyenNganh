@@ -12,8 +12,9 @@ RUN ./gradlew bootJar --no-daemon ${GRADLE_ARGS}
 # Stage 2: Runtime
 FROM eclipse-temurin:21-jre-alpine
 
+# Cập nhật gói hệ điều hành đã có bản vá (vd. CVE-2026-77214 libexpat 2.8.5-r0 -> 2.9.0-r0)
 # Chạy bằng user thường thay vì root (sửa finding Semgrep missing-user-entrypoint)
-RUN addgroup -S app && adduser -S -G app app
+RUN apk upgrade --no-cache && addgroup -S app && adduser -S -G app app
 
 WORKDIR /app
 
