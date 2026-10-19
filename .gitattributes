@@ -1,0 +1,6 @@
+# Giữ LF cho file chạy trên Linux runner / Git Bash và file được hash (policy sha256)
+*.sh      text eol=lf
+*.py      text eol=lf
+*.yml     text eol=lf
+*.yaml    text eol=lf
+Dockerfile text eol=lf
