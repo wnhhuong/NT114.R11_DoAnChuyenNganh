@@ -16,6 +16,19 @@ on:
         required: false
         type: boolean
         default: false
+      vulnerable_deps:
+        description: "Build with vulnerable Tomcat 11.0.24 / Jackson 3.1.5 (test scenario)"
+        required: false
+        type: boolean
+        default: false
+      policy:
+        description: "Security policy used by the Trust Evaluation Engine"
+        required: false
+        type: choice
+        options:
+          - default
+          - strict
+        default: default
 
 permissions:
   contents: read
@@ -133,6 +146,9 @@ jobs:
           context: .
           push: true
           tags: ${{ steps.image.outputs.image }}:secure-${{ github.sha }}
+          # Kịch bản "có lỗ hổng": hạ Tomcat/Jackson qua Gradle property, không sửa source
+          build-args: |
+            GRADLE_ARGS=${{ inputs.vulnerable_deps && '-PtomcatVersion=11.0.24 -PjacksonVersion=3.1.5' || '' }}
 
       - name: Trivy image scan
         uses: aquasecurity/trivy-action@v0.36.0
@@ -239,8 +255,25 @@ jobs:
           cosign verify-attestation --type cyclonedx \
             --certificate-identity-regexp "$CERTIFICATE_IDENTITY" \
             --certificate-oidc-issuer "$OIDC_ISSUER" \
-            "$IMAGE@$DIGEST" | tee sbom-verify.json
+            "$IMAGE@$DIGEST" > sbom-verify.json
 
+      # MỚI: verify attestation báo cáo lỗ hổng (trước đây chưa verify)
+      - name: Verify vulnerability attestation
+        id: verify-vuln
+        continue-on-error: true
+        env:
+          IMAGE: ${{ needs.build-sign.outputs.image }}
+          DIGEST: ${{ needs.build-sign.outputs.digest }}
+          CERTIFICATE_IDENTITY: https://github.com/${{ github.repository }}/.github/workflows/secure-ci.yml@.*
+          OIDC_ISSUER: https://token.actions.githubusercontent.com
+        run: |
+          set -o pipefail
+          cosign verify-attestation --type vuln \
+            --certificate-identity-regexp "$CERTIFICATE_IDENTITY" \
+            --certificate-oidc-issuer "$OIDC_ISSUER" \
+            "$IMAGE@$DIGEST" > vuln-verify.json
+
+      # SỬA: xuất JSON (bản cũ tee ra .txt nhưng gh in ra stderr nên file luôn rỗng)
       - name: Verify build provenance
         id: verify-provenance
         continue-on-error: true
@@ -248,26 +281,41 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           IMAGE: ${{ needs.build-sign.outputs.image }}
           DIGEST: ${{ needs.build-sign.outputs.digest }}
-          OWNER: ${{ github.repository_owner }}
         run: |
-          set -o pipefail
-          gh attestation verify "oci://$IMAGE@$DIGEST" --owner "$OWNER" | tee provenance-verify.txt
+          gh attestation verify "oci://$IMAGE@$DIGEST" \
+            --repo "$GITHUB_REPOSITORY" \
+            --format json > provenance-verify.json
 
       - name: Record verification results
         if: always()
         env:
+          IMAGE: ${{ needs.build-sign.outputs.image }}
+          DIGEST: ${{ needs.build-sign.outputs.digest }}
           SKIP_SIGN: ${{ inputs.skip_sign && 'true' || 'false' }}
           SKIP_PROVENANCE: ${{ inputs.skip_provenance && 'true' || 'false' }}
+          VULNERABLE_DEPS: ${{ inputs.vulnerable_deps && 'true' || 'false' }}
           SIGNATURE_RESULT: ${{ steps.verify-signature.outcome }}
           SBOM_RESULT: ${{ steps.verify-sbom.outcome }}
+          VULN_RESULT: ${{ steps.verify-vuln.outcome }}
           PROVENANCE_RESULT: ${{ steps.verify-provenance.outcome }}
         run: |
-          echo "SIGNATURE_RESULT: $SIGNATURE_RESULT"
-          echo "SBOM_RESULT: $SBOM_RESULT"
-          echo "PROVENANCE_RESULT: $PROVENANCE_RESULT"
-          printf '{\n  "skip_sign": %s,\n  "skip_provenance": %s,\n  "signature_verification": "%s",\n  "sbom_verification": "%s",\n  "provenance_verification": "%s"\n}\n' \
-            "$SKIP_SIGN" "$SKIP_PROVENANCE" "$SIGNATURE_RESULT" "$SBOM_RESULT" "$PROVENANCE_RESULT" \
+          jq -n \
+            --arg image "$IMAGE" --arg digest "$DIGEST" \
+            --arg commit "$GITHUB_SHA" --arg ref "$GITHUB_REF" \
+            --arg run_id "$GITHUB_RUN_ID" --arg event "$GITHUB_EVENT_NAME" \
+            --argjson skip_sign "$SKIP_SIGN" \
+            --argjson skip_provenance "$SKIP_PROVENANCE" \
+            --argjson vulnerable_deps "$VULNERABLE_DEPS" \
+            --arg sig "$SIGNATURE_RESULT" --arg sbom "$SBOM_RESULT" \
+            --arg vuln "$VULN_RESULT" --arg prov "$PROVENANCE_RESULT" \
+            '{image: $image, digest: $digest, commit: $commit, ref: $ref,
+              run_id: $run_id, event: $event,
+              skip_sign: $skip_sign, skip_provenance: $skip_provenance,
+              vulnerable_deps: $vulnerable_deps,
+              signature_verification: $sig, sbom_verification: $sbom,
+              vuln_verification: $vuln, provenance_verification: $prov}' \
             > verification.json
+          cat verification.json
 
       - name: Upload verification evidence
         if: always()
@@ -277,29 +325,122 @@ jobs:
           path: |
             signature-verify.json
             sbom-verify.json
-            provenance-verify.txt
+            vuln-verify.json
+            provenance-verify.json
             verification.json
           if-no-files-found: warn
 
-          
-      - name: Fail if any verification failed
-        if: always()
+      # ĐÃ BỎ bước "Fail if any verification failed": quyết định chặn giờ thuộc về
+      # Trust Evaluation Engine (job trust-evaluation), job verify chỉ thu bằng chứng.
+
+  trust-evaluation:
+    name: Trust evaluation and policy decision
+    needs:
+      - build-sign
+      - verify
+    if: ${{ always() && needs.build-sign.result == 'success' && needs.verify.result == 'success' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      decision: ${{ steps.evaluate.outputs.decision }}
+    steps:
+      - name: Checkout trust engine
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: trust-engine
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install engine dependencies
+        run: python -m pip install -r trust-engine/requirements.txt
+
+      - name: Download evidence of this run
+        uses: actions/download-artifact@v4
+        with:
+          pattern: evidence-*
+          path: evidence
+
+      - name: Evaluate evidence against security policy
+        id: evaluate
         env:
-          SIGNATURE_RESULT: ${{ steps.verify-signature.outcome }}
-          SBOM_RESULT: ${{ steps.verify-sbom.outcome }}
-          PROVENANCE_RESULT: ${{ steps.verify-provenance.outcome }}
+          IMAGE: ${{ needs.build-sign.outputs.image }}
+          DIGEST: ${{ needs.build-sign.outputs.digest }}
+          POLICY_NAME: ${{ inputs.policy || 'default' }}
         run: |
-          if [ "$SIGNATURE_RESULT" != "success" ]; then
-            echo "Image signature verification failed."
+          set +e
+          PYTHONPATH=trust-engine python -m trust_engine evaluate \
+            --evidence evidence \
+            --policy "trust-engine/policy/${POLICY_NAME}.yaml" \
+            --image "$IMAGE" --digest "$DIGEST" \
+            --out decision.json --markdown decision.md
+          code=$?
+          set -e
+          if [ -f decision.md ]; then cat decision.md >> "$GITHUB_STEP_SUMMARY"; fi
+          if [ -f decision.json ]; then
+            echo "decision=$(jq -r .decision decision.json)" >> "$GITHUB_OUTPUT"
+          else
+            echo "decision=ERROR" >> "$GITHUB_OUTPUT"
+          fi
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+
+      - name: Upload trust decision
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trust-decision
+          path: |
+            decision.json
+            decision.md
+          if-no-files-found: warn
+
+      - name: Enforce decision
+        env:
+          DECISION: ${{ steps.evaluate.outputs.decision }}
+          EXIT_CODE: ${{ steps.evaluate.outputs.exit_code }}
+        run: |
+          echo "Trust decision: $DECISION (engine exit code $EXIT_CODE)"
+          if [ "$EXIT_CODE" != "0" ]; then
+            echo "::error title=Artifact BLOCKED::Trust Evaluation Engine trả về $DECISION"
             exit 1
           fi
 
-          if [ "$SBOM_RESULT" != "success" ]; then
-            echo "SBOM attestation verification failed."
-            exit 1
-          fi
+  # TÙY CHỌN (khuyến nghị): ký quyết định và gắn vào image để Kyverno (tuần 10-12) kiểm tra
+  attest-decision:
+    name: Sign and attach trust decision
+    needs:
+      - build-sign
+      - trust-evaluation
+    if: ${{ always() && (needs.trust-evaluation.result == 'success' || needs.trust-evaluation.result == 'failure') }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    steps:
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3.8.1
 
-          if [ "$PROVENANCE_RESULT" != "success" ]; then
-            echo "Build provenance verification failed."
-            exit 1
-          fi
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download trust decision
+        uses: actions/download-artifact@v4
+        with:
+          name: trust-decision
+
+      - name: Attest decision to image digest
+        env:
+          IMAGE: ${{ needs.build-sign.outputs.image }}
+          DIGEST: ${{ needs.build-sign.outputs.digest }}
+          PREDICATE_TYPE: https://github.com/${{ github.repository }}/trust-decision/v1
+        run: |
+          cosign attest --yes --type "$PREDICATE_TYPE" \
+            --predicate decision.json "$IMAGE@$DIGEST"
