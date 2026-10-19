@@ -1,0 +1,64 @@
+# Security Policy mặc định cho ghcr.io/wnhhuong/nt114.r11_doanchuyennganh
+# action: block = vi phạm => UNTRUSTED/BLOCKED | warn = chỉ cảnh báo | off = tắt rule
+apiVersion: trust.nt114/v1
+kind: SecurityPolicy
+metadata:
+  name: default
+  version: "1.0.0"
+  description: >
+    Artifact chỉ TRUSTED khi: có chữ ký hợp lệ từ đúng workflow secure-ci.yml trên main,
+    có SBOM đã ký gắn với digest, có build provenance xác minh được, không có lỗ hổng
+    CRITICAL/HIGH (trừ exception còn hạn), không lộ secret, và các evidence nhất quán.
+
+# Danh tính tin cậy (trust anchor): ai được phép ký / build artifact
+identity:
+  repository: wnhhuong/NT114.R11_DoAnChuyenNganh
+  workflow_path: .github/workflows/secure-ci.yml
+  allowed_refs: [refs/heads/main]
+  oidc_issuer: https://token.actions.githubusercontent.com
+  allowed_triggers: [push, workflow_dispatch]
+
+evidence:
+  action: block            # thiếu evidence bắt buộc => chặn (fail-closed)
+  required: [verification, signature, sbom_attestation, sbom, vuln_report, semgrep, gitleaks, trivy_deps]
+
+rules:
+  signature:
+    action: block
+  sbom:
+    action: block
+    min_components: 10
+    uploaded_mismatch_action: block   # sbom.cdx.json khác bản đã ký => chặn
+  provenance:
+    action: block
+    missing_detail_action: warn       # có verify=success nhưng thiếu JSON chi tiết => cảnh báo
+    require_github_hosted: true
+  vulnerabilities:
+    action: block
+    max:          { CRITICAL: 0, HIGH: 0 }        # -1 = không giới hạn
+    warn_above:   { MEDIUM: 0, UNKNOWN: 0 }
+    ignore_unfixed: false
+    signed_report_action: warn        # nâng lên block sau khi verify job có vuln attestation
+    uploaded_mismatch_action: block   # vuln.cosign.json khác bản đã ký => chặn
+    max_age_days: 7
+    freshness_action: warn
+    exceptions: []
+    # Ví dụ exception (risk acceptance), BẮT BUỘC có lý do và ngày hết hạn:
+    # - id: CVE-2026-46675
+    #   reason: "libpng trong base image; ứng dụng không xử lý ảnh PNG"
+    #   expires: 2026-11-30
+  dependencies:
+    action: block
+    max: { CRITICAL: 0, HIGH: 0 }
+    coverage_action: warn
+  secrets:
+    action: block
+    max_findings: 0
+  sast:
+    action: warn                      # Semgrep p/default chủ yếu là cấu hình; xem strict.yaml
+    max: { ERROR: 0 }
+  consistency:
+    action: block
+
+scoring:                               # chỉ để tham khảo/báo cáo, KHÔNG quyết định
+  weights: { signature: 25, provenance: 25, sbom: 15, vulnerabilities: 25, secrets: 10 }
