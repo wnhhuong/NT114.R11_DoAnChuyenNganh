@@ -1,0 +1,335 @@
+{
+  "schema": "trust-decision/v1",
+  "engine_version": "1.0.0",
+  "evaluated_at": "2026-10-19T04:08:50.131653Z",
+  "artifact": {
+    "image": "ghcr.io/wnhhuong/nt114.r11_doanchuyennganh",
+    "digest": "sha256:2ac1abe5f98b448eadd1460e28482b0ad7cab7011d4ebdb531b3905e3edb157d",
+    "digest_source": "verification.json"
+  },
+  "policy": {
+    "name": "default",
+    "version": "1.0.0",
+    "sha256": "3aa24f7a8e0743975a94f8eca0843376a3f6347cc51b8ab6bc1249a5f51f4822"
+  },
+  "decision": "ALLOWED",
+  "trust_level": "TRUSTED",
+  "trust_score": 100,
+  "summary": {
+    "rules": 21,
+    "passed": 21,
+    "violations": 0,
+    "warnings": 0,
+    "skipped": 0
+  },
+  "violations": [],
+  "warnings": [],
+  "rules": [
+    {
+      "id": "EVD-001",
+      "category": "evidence",
+      "title": "Đủ evidence bắt buộc",
+      "status": "pass",
+      "severity": null,
+      "message": "Có đủ 8 evidence bắt buộc",
+      "details": {}
+    },
+    {
+      "id": "EVD-002",
+      "category": "evidence",
+      "title": "Xác định digest cần đánh giá",
+      "status": "pass",
+      "severity": null,
+      "message": "Digest lấy từ verification.json",
+      "details": {
+        "digest": "sha256:2ac1abe5f98b448eadd1460e28482b0ad7cab7011d4ebdb531b3905e3edb157d"
+      }
+    },
+    {
+      "id": "SIG-001",
+      "category": "signature",
+      "title": "Chữ ký image xác minh thành công",
+      "status": "pass",
+      "severity": null,
+      "message": "cosign verify: success",
+      "details": {
+        "skip_sign": false
+      }
+    },
+    {
+      "id": "SIG-002",
+      "category": "signature",
+      "title": "Chữ ký gắn với đúng digest/image",
+      "status": "pass",
+      "severity": null,
+      "message": "1/1 chữ ký trỏ tới digest sha256:2ac1abe5f98b448eadd1460e28482b0ad7cab7011d4ebdb531b3905e3edb157d",
+      "details": {}
+    },
+    {
+      "id": "SIG-003",
+      "category": "signature",
+      "title": "Danh tính người ký đúng workflow tin cậy",
+      "status": "pass",
+      "severity": null,
+      "message": "Ký bởi https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh/.github/workflows/secure-ci.yml@refs/heads/main (push)",
+      "details": {
+        "commit": "bab26702ddefd5ed04c11aae9e484bab1aacd511"
+      }
+    },
+    {
+      "id": "SBOM-001",
+      "category": "sbom",
+      "title": "SBOM attestation xác minh thành công",
+      "status": "pass",
+      "severity": null,
+      "message": "cosign verify-attestation --type cyclonedx: success",
+      "details": {}
+    },
+    {
+      "id": "SBOM-002",
+      "category": "sbom",
+      "title": "SBOM attestation gắn với đúng digest",
+      "status": "pass",
+      "severity": null,
+      "message": "subject=['sha256:2ac1abe5f98b448eadd1460e28482b0ad7cab7011d4ebdb531b3905e3edb157d']",
+      "details": {
+        "expected": "sha256:2ac1abe5f98b448eadd1460e28482b0ad7cab7011d4ebdb531b3905e3edb157d"
+      }
+    },
+    {
+      "id": "SBOM-003",
+      "category": "sbom",
+      "title": "Nội dung SBOM hợp lệ",
+      "status": "pass",
+      "severity": null,
+      "message": "CycloneDX 1.6, 111 components",
+      "details": {
+        "components": 111,
+        "spec": "1.6"
+      }
+    },
+    {
+      "id": "SBOM-004",
+      "category": "sbom",
+      "title": "SBOM upload trùng SBOM đã ký",
+      "status": "pass",
+      "severity": null,
+      "message": "sbom.cdx.json giống hệt predicate đã ký",
+      "details": {}
+    },
+    {
+      "id": "PROV-001",
+      "category": "provenance",
+      "title": "Build provenance xác minh thành công",
+      "status": "pass",
+      "severity": null,
+      "message": "gh attestation verify: success",
+      "details": {
+        "skip_provenance": false
+      }
+    },
+    {
+      "id": "PROV-002",
+      "category": "provenance",
+      "title": "Nội dung provenance khớp policy",
+      "status": "pass",
+      "severity": null,
+      "message": "https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh .github/workflows/secure-ci.yml@refs/heads/main",
+      "details": {
+        "builder": "https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh/.github/workflows/secure-ci.yml@refs/heads/main",
+        "commit": "bab26702ddefd5ed04c11aae9e484bab1aacd511"
+      }
+    },
+    {
+      "id": "VULN-001",
+      "category": "vulnerabilities",
+      "title": "Báo cáo lỗ hổng gắn với đúng image",
+      "status": "pass",
+      "severity": null,
+      "message": "ArtifactName=ghcr.io/wnhhuong/nt114.r11_doanchuyennganh@sha256:2ac1abe5f98b448eadd1460e28482b0ad7cab7011d4ebdb531b3905e3edb157d",
+      "details": {
+        "source": "signed-attestation"
+      }
+    },
+    {
+      "id": "VULN-002",
+      "category": "vulnerabilities",
+      "title": "Lỗ hổng trong ngưỡng cho phép",
+      "status": "pass",
+      "severity": null,
+      "message": "Đạt ngưỡng {'CRITICAL': 0, 'HIGH': 0}",
+      "details": {
+        "counts": {},
+        "suppressed": [],
+        "expired_exceptions": [],
+        "top_findings": [],
+        "source": "signed-attestation"
+      }
+    },
+    {
+      "id": "VULN-003",
+      "category": "vulnerabilities",
+      "title": "Báo cáo lỗ hổng có chữ ký và toàn vẹn",
+      "status": "pass",
+      "severity": null,
+      "message": "Dùng predicate từ attestation --type vuln đã verify",
+      "details": {}
+    },
+    {
+      "id": "VULN-004",
+      "category": "vulnerabilities",
+      "title": "Báo cáo lỗ hổng còn mới",
+      "status": "pass",
+      "severity": null,
+      "message": "Quét lúc 2026-10-19T03:50:49.617821647Z (0.0 ngày trước, tối đa 7)",
+      "details": {}
+    },
+    {
+      "id": "VULN-005",
+      "category": "vulnerabilities",
+      "title": "Lỗ hổng mức thấp hơn (cảnh báo)",
+      "status": "pass",
+      "severity": null,
+      "message": "Không vượt ngưỡng cảnh báo",
+      "details": {
+        "counts": {}
+      }
+    },
+    {
+      "id": "DEP-001",
+      "category": "dependencies",
+      "title": "Dependency trong ngưỡng cho phép",
+      "status": "pass",
+      "severity": null,
+      "message": "counts={}",
+      "details": {
+        "top_findings": []
+      }
+    },
+    {
+      "id": "DEP-002",
+      "category": "dependencies",
+      "title": "Trivy fs thực sự quét được dependency",
+      "status": "pass",
+      "severity": null,
+      "message": "1 target",
+      "details": {}
+    },
+    {
+      "id": "SEC-001",
+      "category": "secrets",
+      "title": "Không lộ secret",
+      "status": "pass",
+      "severity": null,
+      "message": "0 finding (tối đa 0)",
+      "details": {
+        "rules": []
+      }
+    },
+    {
+      "id": "SAST-001",
+      "category": "sast",
+      "title": "SAST trong ngưỡng",
+      "status": "pass",
+      "severity": null,
+      "message": "counts={'WARNING': 31}",
+      "details": {
+        "counts": {
+          "WARNING": 31
+        },
+        "errors": [],
+        "scan_errors": 1
+      }
+    },
+    {
+      "id": "CONS-001",
+      "category": "consistency",
+      "title": "Evidence nhất quán về commit",
+      "status": "pass",
+      "severity": null,
+      "message": "Commit bab2670 khớp 4 nguồn",
+      "details": {
+        "sources": {
+          "verification.json": "bab26702ddefd5ed04c11aae9e484bab1aacd511",
+          "signature cert": "bab26702ddefd5ed04c11aae9e484bab1aacd511",
+          "provenance": "bab26702ddefd5ed04c11aae9e484bab1aacd511",
+          "trivy-deps": "bab26702ddefd5ed04c11aae9e484bab1aacd511"
+        }
+      }
+    }
+  ],
+  "evidence": {
+    "verification": {
+      "file": "verification.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196465075\\evidence-verification\\verification.json",
+      "sha256": "41b48fd74c100f9b0314c52199cb3e0603550e7114cdc60021e93bee5798dd5b",
+      "error": null
+    },
+    "signature": {
+      "file": "signature-verify.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196465075\\evidence-verification\\signature-verify.json",
+      "sha256": "302a9cda7709c530095bbe5bc0d8d89c2a0e3e790b0cc09c24282ce2027bd4c6",
+      "error": null
+    },
+    "sbom_attestation": {
+      "file": "sbom-verify.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196465075\\evidence-verification\\sbom-verify.json",
+      "sha256": "09f9920baee0977824c438a0d312a8f60f7f9e0f6b2821f70c23eab7c1f6c1c1",
+      "error": null
+    },
+    "vuln_attestation": {
+      "file": "vuln-verify.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196465075\\evidence-verification\\vuln-verify.json",
+      "sha256": "d60042bea4479476b03b708af43b5ea2ea95f35afa632b0f2e12feac4b492475",
+      "error": null
+    },
+    "provenance": {
+      "file": "provenance-verify.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196465075\\evidence-verification\\provenance-verify.json",
+      "sha256": "e3889ad64b67a9ceb2d3628263bc82ffe51354a2aa2e5bf8541500d42ceda38c",
+      "error": null
+    },
+    "sbom": {
+      "file": "sbom.cdx.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196465075\\evidence-sbom\\sbom.cdx.json",
+      "sha256": "c5bd11fff9e5b6afaf579bb1aced07bdacf8b1efb5393394d71fb98a334e7100",
+      "error": null
+    },
+    "vuln_report": {
+      "file": "vuln.cosign.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196465075\\evidence-image-vulnerabilities\\vuln.cosign.json",
+      "sha256": "a3b94d33f77d2317b298e77e2f2126cf10c63af13d98e20adbd8009a6e227875",
+      "error": null
+    },
+    "semgrep": {
+      "file": "semgrep.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196465075\\evidence-semgrep\\semgrep.json",
+      "sha256": "2fc787d3941c0a2c497286c0965135b505ca51fca12086b371b50effedacdf3e",
+      "error": null
+    },
+    "gitleaks": {
+      "file": "gitleaks.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196465075\\evidence-gitleaks\\gitleaks.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "error": null
+    },
+    "trivy_deps": {
+      "file": "trivy-deps.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196465075\\evidence-dependencies\\trivy-deps.json",
+      "sha256": "48921eff137774e675ee74a7450c8a96e5c09af005ca90f256d1b774fb52d73e",
+      "error": null
+    }
+  },
+  "notes": [],
+  "evaluation_ms": 19.04
+}

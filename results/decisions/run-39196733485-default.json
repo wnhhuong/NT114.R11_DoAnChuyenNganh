@@ -1,0 +1,397 @@
+{
+  "schema": "trust-decision/v1",
+  "engine_version": "1.0.0",
+  "evaluated_at": "2026-10-19T04:08:58.080342Z",
+  "artifact": {
+    "image": "ghcr.io/wnhhuong/nt114.r11_doanchuyennganh",
+    "digest": "sha256:23fe5d29b9a08a8539b9c4ae24e8ed1f8b9e9034cb231f8ad5533c75ff460231",
+    "digest_source": "verification.json"
+  },
+  "policy": {
+    "name": "default",
+    "version": "1.0.0",
+    "sha256": "3aa24f7a8e0743975a94f8eca0843376a3f6347cc51b8ab6bc1249a5f51f4822"
+  },
+  "decision": "BLOCKED",
+  "trust_level": "UNTRUSTED",
+  "trust_score": 75,
+  "summary": {
+    "rules": 21,
+    "passed": 19,
+    "violations": 1,
+    "warnings": 1,
+    "skipped": 0
+  },
+  "violations": [
+    {
+      "id": "VULN-002",
+      "category": "vulnerabilities",
+      "title": "Lỗ hổng trong ngưỡng cho phép",
+      "status": "fail",
+      "severity": "block",
+      "message": "CRITICAL=3 > 0; HIGH=5 > 0",
+      "details": {
+        "counts": {
+          "CRITICAL": 3,
+          "HIGH": 5,
+          "MEDIUM": 2
+        },
+        "suppressed": [],
+        "expired_exceptions": [],
+        "top_findings": [
+          "CRITICAL CVE-2026-65182 org.apache.tomcat.embed:tomcat-embed-core 11.0.24 -> 11.0.25, 10.1.58, 9.0.121",
+          "CRITICAL CVE-2026-65905 org.apache.tomcat.embed:tomcat-embed-core 11.0.24 -> 11.0.25, 10.1.58, 9.0.121",
+          "CRITICAL CVE-2026-68525 org.apache.tomcat.embed:tomcat-embed-core 11.0.24 -> 11.0.25, 10.1.58, 9.0.121",
+          "HIGH CVE-2026-89407 tools.jackson.core:jackson-core 3.1.5 -> 3.1.7, 3.2.2",
+          "HIGH CVE-2026-89425 tools.jackson.core:jackson-core 3.1.5 -> 3.1.7, 3.2.3",
+          "HIGH CVE-2026-68497 tools.jackson.core:jackson-databind 3.1.5 -> 3.2.2, 3.1.6",
+          "HIGH CVE-2026-91776 tools.jackson.core:jackson-databind 3.1.5 -> 3.1.7, 3.2.3",
+          "HIGH CVE-2026-91777 tools.jackson.core:jackson-databind 3.1.5 -> 3.1.7, 3.2.3"
+        ],
+        "source": "signed-attestation"
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "id": "VULN-005",
+      "category": "vulnerabilities",
+      "title": "Lỗ hổng mức thấp hơn (cảnh báo)",
+      "status": "fail",
+      "severity": "warn",
+      "message": "MEDIUM=2 > 0",
+      "details": {
+        "counts": {
+          "CRITICAL": 3,
+          "HIGH": 5,
+          "MEDIUM": 2
+        }
+      }
+    }
+  ],
+  "rules": [
+    {
+      "id": "EVD-001",
+      "category": "evidence",
+      "title": "Đủ evidence bắt buộc",
+      "status": "pass",
+      "severity": null,
+      "message": "Có đủ 8 evidence bắt buộc",
+      "details": {}
+    },
+    {
+      "id": "EVD-002",
+      "category": "evidence",
+      "title": "Xác định digest cần đánh giá",
+      "status": "pass",
+      "severity": null,
+      "message": "Digest lấy từ verification.json",
+      "details": {
+        "digest": "sha256:23fe5d29b9a08a8539b9c4ae24e8ed1f8b9e9034cb231f8ad5533c75ff460231"
+      }
+    },
+    {
+      "id": "SIG-001",
+      "category": "signature",
+      "title": "Chữ ký image xác minh thành công",
+      "status": "pass",
+      "severity": null,
+      "message": "cosign verify: success",
+      "details": {
+        "skip_sign": false
+      }
+    },
+    {
+      "id": "SIG-002",
+      "category": "signature",
+      "title": "Chữ ký gắn với đúng digest/image",
+      "status": "pass",
+      "severity": null,
+      "message": "1/1 chữ ký trỏ tới digest sha256:23fe5d29b9a08a8539b9c4ae24e8ed1f8b9e9034cb231f8ad5533c75ff460231",
+      "details": {}
+    },
+    {
+      "id": "SIG-003",
+      "category": "signature",
+      "title": "Danh tính người ký đúng workflow tin cậy",
+      "status": "pass",
+      "severity": null,
+      "message": "Ký bởi https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh/.github/workflows/secure-ci.yml@refs/heads/main (workflow_dispatch)",
+      "details": {
+        "commit": "bab26702ddefd5ed04c11aae9e484bab1aacd511"
+      }
+    },
+    {
+      "id": "SBOM-001",
+      "category": "sbom",
+      "title": "SBOM attestation xác minh thành công",
+      "status": "pass",
+      "severity": null,
+      "message": "cosign verify-attestation --type cyclonedx: success",
+      "details": {}
+    },
+    {
+      "id": "SBOM-002",
+      "category": "sbom",
+      "title": "SBOM attestation gắn với đúng digest",
+      "status": "pass",
+      "severity": null,
+      "message": "subject=['sha256:23fe5d29b9a08a8539b9c4ae24e8ed1f8b9e9034cb231f8ad5533c75ff460231']",
+      "details": {
+        "expected": "sha256:23fe5d29b9a08a8539b9c4ae24e8ed1f8b9e9034cb231f8ad5533c75ff460231"
+      }
+    },
+    {
+      "id": "SBOM-003",
+      "category": "sbom",
+      "title": "Nội dung SBOM hợp lệ",
+      "status": "pass",
+      "severity": null,
+      "message": "CycloneDX 1.6, 111 components",
+      "details": {
+        "components": 111,
+        "spec": "1.6"
+      }
+    },
+    {
+      "id": "SBOM-004",
+      "category": "sbom",
+      "title": "SBOM upload trùng SBOM đã ký",
+      "status": "pass",
+      "severity": null,
+      "message": "sbom.cdx.json giống hệt predicate đã ký",
+      "details": {}
+    },
+    {
+      "id": "PROV-001",
+      "category": "provenance",
+      "title": "Build provenance xác minh thành công",
+      "status": "pass",
+      "severity": null,
+      "message": "gh attestation verify: success",
+      "details": {
+        "skip_provenance": false
+      }
+    },
+    {
+      "id": "PROV-002",
+      "category": "provenance",
+      "title": "Nội dung provenance khớp policy",
+      "status": "pass",
+      "severity": null,
+      "message": "https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh .github/workflows/secure-ci.yml@refs/heads/main",
+      "details": {
+        "builder": "https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh/.github/workflows/secure-ci.yml@refs/heads/main",
+        "commit": "bab26702ddefd5ed04c11aae9e484bab1aacd511"
+      }
+    },
+    {
+      "id": "VULN-001",
+      "category": "vulnerabilities",
+      "title": "Báo cáo lỗ hổng gắn với đúng image",
+      "status": "pass",
+      "severity": null,
+      "message": "ArtifactName=ghcr.io/wnhhuong/nt114.r11_doanchuyennganh@sha256:23fe5d29b9a08a8539b9c4ae24e8ed1f8b9e9034cb231f8ad5533c75ff460231",
+      "details": {
+        "source": "signed-attestation"
+      }
+    },
+    {
+      "id": "VULN-002",
+      "category": "vulnerabilities",
+      "title": "Lỗ hổng trong ngưỡng cho phép",
+      "status": "fail",
+      "severity": "block",
+      "message": "CRITICAL=3 > 0; HIGH=5 > 0",
+      "details": {
+        "counts": {
+          "CRITICAL": 3,
+          "HIGH": 5,
+          "MEDIUM": 2
+        },
+        "suppressed": [],
+        "expired_exceptions": [],
+        "top_findings": [
+          "CRITICAL CVE-2026-65182 org.apache.tomcat.embed:tomcat-embed-core 11.0.24 -> 11.0.25, 10.1.58, 9.0.121",
+          "CRITICAL CVE-2026-65905 org.apache.tomcat.embed:tomcat-embed-core 11.0.24 -> 11.0.25, 10.1.58, 9.0.121",
+          "CRITICAL CVE-2026-68525 org.apache.tomcat.embed:tomcat-embed-core 11.0.24 -> 11.0.25, 10.1.58, 9.0.121",
+          "HIGH CVE-2026-89407 tools.jackson.core:jackson-core 3.1.5 -> 3.1.7, 3.2.2",
+          "HIGH CVE-2026-89425 tools.jackson.core:jackson-core 3.1.5 -> 3.1.7, 3.2.3",
+          "HIGH CVE-2026-68497 tools.jackson.core:jackson-databind 3.1.5 -> 3.2.2, 3.1.6",
+          "HIGH CVE-2026-91776 tools.jackson.core:jackson-databind 3.1.5 -> 3.1.7, 3.2.3",
+          "HIGH CVE-2026-91777 tools.jackson.core:jackson-databind 3.1.5 -> 3.1.7, 3.2.3"
+        ],
+        "source": "signed-attestation"
+      }
+    },
+    {
+      "id": "VULN-003",
+      "category": "vulnerabilities",
+      "title": "Báo cáo lỗ hổng có chữ ký và toàn vẹn",
+      "status": "pass",
+      "severity": null,
+      "message": "Dùng predicate từ attestation --type vuln đã verify",
+      "details": {}
+    },
+    {
+      "id": "VULN-004",
+      "category": "vulnerabilities",
+      "title": "Báo cáo lỗ hổng còn mới",
+      "status": "pass",
+      "severity": null,
+      "message": "Quét lúc 2026-10-19T03:54:26.804109762Z (0.0 ngày trước, tối đa 7)",
+      "details": {}
+    },
+    {
+      "id": "VULN-005",
+      "category": "vulnerabilities",
+      "title": "Lỗ hổng mức thấp hơn (cảnh báo)",
+      "status": "fail",
+      "severity": "warn",
+      "message": "MEDIUM=2 > 0",
+      "details": {
+        "counts": {
+          "CRITICAL": 3,
+          "HIGH": 5,
+          "MEDIUM": 2
+        }
+      }
+    },
+    {
+      "id": "DEP-001",
+      "category": "dependencies",
+      "title": "Dependency trong ngưỡng cho phép",
+      "status": "pass",
+      "severity": null,
+      "message": "counts={}",
+      "details": {
+        "top_findings": []
+      }
+    },
+    {
+      "id": "DEP-002",
+      "category": "dependencies",
+      "title": "Trivy fs thực sự quét được dependency",
+      "status": "pass",
+      "severity": null,
+      "message": "1 target",
+      "details": {}
+    },
+    {
+      "id": "SEC-001",
+      "category": "secrets",
+      "title": "Không lộ secret",
+      "status": "pass",
+      "severity": null,
+      "message": "0 finding (tối đa 0)",
+      "details": {
+        "rules": []
+      }
+    },
+    {
+      "id": "SAST-001",
+      "category": "sast",
+      "title": "SAST trong ngưỡng",
+      "status": "pass",
+      "severity": null,
+      "message": "counts={'WARNING': 31}",
+      "details": {
+        "counts": {
+          "WARNING": 31
+        },
+        "errors": [],
+        "scan_errors": 1
+      }
+    },
+    {
+      "id": "CONS-001",
+      "category": "consistency",
+      "title": "Evidence nhất quán về commit",
+      "status": "pass",
+      "severity": null,
+      "message": "Commit bab2670 khớp 4 nguồn",
+      "details": {
+        "sources": {
+          "verification.json": "bab26702ddefd5ed04c11aae9e484bab1aacd511",
+          "signature cert": "bab26702ddefd5ed04c11aae9e484bab1aacd511",
+          "provenance": "bab26702ddefd5ed04c11aae9e484bab1aacd511",
+          "trivy-deps": "bab26702ddefd5ed04c11aae9e484bab1aacd511"
+        }
+      }
+    }
+  ],
+  "evidence": {
+    "verification": {
+      "file": "verification.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196733485\\evidence-verification\\verification.json",
+      "sha256": "d2604a34e54535d21b33177ee965c38220802f52d8e7dc0a1fa7f138eed30acd",
+      "error": null
+    },
+    "signature": {
+      "file": "signature-verify.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196733485\\evidence-verification\\signature-verify.json",
+      "sha256": "abfee66215e2c87bb4fc4706e11969cff24f28f74666f53e1d6a5eae476443d7",
+      "error": null
+    },
+    "sbom_attestation": {
+      "file": "sbom-verify.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196733485\\evidence-verification\\sbom-verify.json",
+      "sha256": "defa7486cc71a6974b6edd89dbfe231a0027826070ad9389197e3bcb70311245",
+      "error": null
+    },
+    "vuln_attestation": {
+      "file": "vuln-verify.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196733485\\evidence-verification\\vuln-verify.json",
+      "sha256": "d4446bf33a6893f52df1f4f6ef9f3935a8b48f780111e0c3f8bf0bd63a6fb379",
+      "error": null
+    },
+    "provenance": {
+      "file": "provenance-verify.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196733485\\evidence-verification\\provenance-verify.json",
+      "sha256": "1b2e481e19f51c30fe85e9258d28bf1c4a7ffb033f43294f3a367a7028e63329",
+      "error": null
+    },
+    "sbom": {
+      "file": "sbom.cdx.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196733485\\evidence-sbom\\sbom.cdx.json",
+      "sha256": "633564612339f0dc9cd5f065a496fdc4cb2d85c483e18aee5ab1ad7b5a143014",
+      "error": null
+    },
+    "vuln_report": {
+      "file": "vuln.cosign.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196733485\\evidence-image-vulnerabilities\\vuln.cosign.json",
+      "sha256": "364c52d7926d32b3622b133b1cbf61fa1169bc880706f1c5754a8036d22a7703",
+      "error": null
+    },
+    "semgrep": {
+      "file": "semgrep.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196733485\\evidence-semgrep\\semgrep.json",
+      "sha256": "894492912af895850e66d60d5983b5d718cc8679c6d3d77bec7f0aabf3b859e1",
+      "error": null
+    },
+    "gitleaks": {
+      "file": "gitleaks.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196733485\\evidence-gitleaks\\gitleaks.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "error": null
+    },
+    "trivy_deps": {
+      "file": "trivy-deps.json",
+      "status": "present",
+      "path": "results\\evidence\\run-39196733485\\evidence-dependencies\\trivy-deps.json",
+      "sha256": "f58f191517b63088fbc4f0b8f5d77eef4136e8bd0c2ba1db090645f31fd4846c",
+      "error": null
+    }
+  },
+  "notes": [],
+  "evaluation_ms": 18.4
+}
