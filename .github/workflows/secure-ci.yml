@@ -49,14 +49,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Ghim phiên bản: Python 3.15 + semgrep 1.183.0 làm semgrep-core segfault (-11) trên runner
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          python-version: "3.14"
 
       - name: Semgrep (SAST)
         run: |
-          python -m pip install semgrep
+          python -m pip install semgrep==1.181.0
           semgrep scan --config p/default --json --output semgrep.json
 
       - name: Upload Semgrep report
