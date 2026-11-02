@@ -1,0 +1,14 @@
+2026-11-02T13:22:30Z rev=84a4220 app=Synced/Healthy/Succeeded rollout=Healthy|step=3| image=sha256:2ac1abe5f98b
+2026-11-02T13:23:37Z rev=3d65811 app=Synced/Healthy/Succeeded rollout=Healthy|step=3| image=sha256:2ac1abe5f98b
+2026-11-02T13:29:21Z rev=3d65811 app=OutOfSync/Healthy/Running rollout=Healthy|step=3| image=sha256:2ac1abe5f98b
+2026-11-02T13:29:24Z rev=3c1cef1 app=OutOfSync/Healthy/Running rollout=Healthy|step=3| image=sha256:6350c4087814
+2026-11-02T13:29:24Z DONE
+2026-11-02T13:30:05Z rollout=Progressing step=0 weight=- stable=86d46cbc59 current=86465b957 msg=more replicas need to be updated analysis=[] app=Synced/Progressing/Running
+2026-11-02T13:30:18Z rollout=Paused step=1 weight=- stable=86d46cbc59 current=86465b957 msg=CanaryPauseStep analysis=[] app=Synced/Suspended/Running
+2026-11-02T13:30:50Z rollout=Progressing step=2 weight=- stable=86d46cbc59 current=86465b957 msg=more replicas need to be updated analysis=[demo-app-86465b957-2-2=Running ] app=Synced/Progressing/Running
+2026-11-02T13:31:30Z rollout=Progressing step=3 weight=- stable=86d46cbc59 current=86465b957 msg=more replicas need to be updated analysis=[demo-app-86465b957-2-2=Successful ] app=Synced/Progressing/Running
+2026-11-02T13:31:39Z rollout=Progressing step=3 weight=- stable=86d46cbc59 current=86465b957 msg=old replicas are pending termination analysis=[demo-app-86465b957-2-2=Successful ] app=Synced/Progressing/Running
+2026-11-02T13:31:57Z rollout=Healthy step=3 weight=- stable=86465b957 current=86465b957 msg= analysis=[demo-app-86465b957-2-2=Successful ] app=Synced/Healthy/Running
+2026-11-02T13:32:09Z rollout=Healthy step=3 weight=- stable=86465b957 current=86465b957 msg= analysis=[demo-app-86465b957-2-2=Successful ] app=Synced/Healthy/Succeeded
+2026-11-02T13:32:09Z END phase=Healthy
+argocd op 2026-11-02T13:29:19Z -> 2026-11-02T13:32:06Z

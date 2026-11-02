@@ -1,0 +1,207 @@
+apiVersion: v1
+items:
+- apiVersion: kyverno.io/v1
+  kind: ClusterPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"kyverno.io/v1","kind":"ClusterPolicy","metadata":{"annotations":{"policies.kyverno.io/description":"Image phải ghim theo digest, có chữ ký keyless của secure-ci.yml@refs/heads/main và có attestation trust-decision/v1 (do Trust Evaluation Engine sinh, ký bởi cùng workflow) với decision == ALLOWED.","policies.kyverno.io/title":"Chỉ triển khai artifact có Trust Decision ALLOWED"},"name":"require-trusted-artifact"},"spec":{"background":false,"failurePolicy":"Fail","rules":[{"imageExtractors":{"Rollout":[{"path":"/spec/template/spec/containers/*/image"}]},"match":{"any":[{"resources":{"kinds":["Pod","argoproj.io/v1alpha1/Rollout"],"namespaces":["demo"]}}]},"name":"signature-and-trust-decision","verifyImages":[{"attestations":[{"attestors":[{"entries":[{"keyless":{"issuer":"https://token.actions.githubusercontent.com","rekor":{"url":"https://rekor.sigstore.dev"},"subject":"https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh/.github/workflows/secure-ci.yml@refs/heads/main"}}]}],"conditions":[{"all":[{"key":"{{ schema }}","message":"Attestation không đúng schema trust-decision/v1","operator":"Equals","value":"trust-decision/v1"},{"key":"{{ decision }}","message":"Trust Evaluation Engine không cho phép artifact này (decision != ALLOWED)","operator":"Equals","value":"ALLOWED"}]}],"type":"https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh/trust-decision/v1"}],"attestors":[{"entries":[{"keyless":{"issuer":"https://token.actions.githubusercontent.com","rekor":{"url":"https://rekor.sigstore.dev"},"subject":"https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh/.github/workflows/secure-ci.yml@refs/heads/main"}}]}],"imageReferences":["harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh*"],"mutateDigest":false,"required":true,"verifyDigest":true}]}],"validationFailureAction":"Enforce","webhookTimeoutSeconds":30}}
+      policies.kyverno.io/description: Image phải ghim theo digest, có chữ ký keyless
+        của secure-ci.yml@refs/heads/main và có attestation trust-decision/v1 (do
+        Trust Evaluation Engine sinh, ký bởi cùng workflow) với decision == ALLOWED.
+      policies.kyverno.io/title: Chỉ triển khai artifact có Trust Decision ALLOWED
+    creationTimestamp: "2026-11-02T12:32:47Z"
+    generation: 1
+    name: require-trusted-artifact
+    resourceVersion: "15192"
+    uid: 2bedccd0-4182-49c5-890e-d4338739b837
+  spec:
+    admission: true
+    background: false
+    emitWarning: false
+    failurePolicy: Fail
+    rules:
+    - imageExtractors:
+        Rollout:
+        - path: /spec/template/spec/containers/*/image
+      match:
+        any:
+        - resources:
+            kinds:
+            - Pod
+            - argoproj.io/v1alpha1/Rollout
+            namespaces:
+            - demo
+      name: signature-and-trust-decision
+      skipBackgroundRequests: true
+      verifyImages:
+      - attestations:
+        - attestors:
+          - entries:
+            - keyless:
+                issuer: https://token.actions.githubusercontent.com
+                rekor:
+                  url: https://rekor.sigstore.dev
+                subject: https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh/.github/workflows/secure-ci.yml@refs/heads/main
+              signatureAlgorithm: sha256
+          conditions:
+          - all:
+            - key: '{{ schema }}'
+              message: Attestation không đúng schema trust-decision/v1
+              operator: Equals
+              value: trust-decision/v1
+            - key: '{{ decision }}'
+              message: Trust Evaluation Engine không cho phép artifact này (decision
+                != ALLOWED)
+              operator: Equals
+              value: ALLOWED
+          type: https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh/trust-decision/v1
+        attestors:
+        - entries:
+          - keyless:
+              issuer: https://token.actions.githubusercontent.com
+              rekor:
+                url: https://rekor.sigstore.dev
+              subject: https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh/.github/workflows/secure-ci.yml@refs/heads/main
+            signatureAlgorithm: sha256
+        imageReferences:
+        - harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh*
+        mutateDigest: false
+        required: true
+        useCache: true
+        verifyDigest: true
+    validationFailureAction: Enforce
+    webhookTimeoutSeconds: 30
+  status:
+    autogen: {}
+    conditions:
+    - lastTransitionTime: "2026-11-02T12:32:47Z"
+      message: Ready
+      reason: Succeeded
+      status: "True"
+      type: Ready
+    rulecount:
+      generate: 0
+      mutate: 0
+      validate: 0
+      verifyimages: 1
+    validatingadmissionpolicy:
+      generated: false
+      message: ""
+- apiVersion: kyverno.io/v1
+  kind: ClusterPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"kyverno.io/v1","kind":"ClusterPolicy","metadata":{"annotations":{"policies.kyverno.io/description":"Namespace demo chỉ được chạy image demo-app pull qua Harbor. Không có rule này, image nằm ngoài imageReferences của require-trusted-artifact sẽ không bị verify.","policies.kyverno.io/title":"Chỉ cho phép image của ứng dụng qua Harbor nội bộ"},"name":"restrict-image-registry"},"spec":{"background":true,"rules":[{"match":{"any":[{"resources":{"kinds":["Pod"],"namespaces":["demo"]}}]},"name":"only-internal-harbor","validate":{"message":"Namespace demo chỉ được chạy image từ harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh (đã qua CI + Trust Engine).","pattern":{"spec":{"=(ephemeralContainers)":[{"image":"harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh*"}],"=(initContainers)":[{"image":"harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh*"}],"containers":[{"image":"harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh*"}]}}}}],"validationFailureAction":"Enforce"}}
+      policies.kyverno.io/description: Namespace demo chỉ được chạy image demo-app
+        pull qua Harbor. Không có rule này, image nằm ngoài imageReferences của require-trusted-artifact
+        sẽ không bị verify.
+      policies.kyverno.io/title: Chỉ cho phép image của ứng dụng qua Harbor nội bộ
+    creationTimestamp: "2026-11-02T12:32:47Z"
+    generation: 1
+    name: restrict-image-registry
+    resourceVersion: "15237"
+    uid: 6c86b32d-d142-4bac-a38e-dff0b75ba5c4
+  spec:
+    admission: true
+    background: true
+    emitWarning: false
+    rules:
+    - match:
+        any:
+        - resources:
+            kinds:
+            - Pod
+            namespaces:
+            - demo
+      name: only-internal-harbor
+      skipBackgroundRequests: true
+      validate:
+        allowExistingViolations: true
+        message: Namespace demo chỉ được chạy image từ harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh
+          (đã qua CI + Trust Engine).
+        pattern:
+          spec:
+            =(ephemeralContainers):
+            - image: harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh*
+            =(initContainers):
+            - image: harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh*
+            containers:
+            - image: harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh*
+    validationFailureAction: Enforce
+  status:
+    autogen:
+      rules:
+      - match:
+          any:
+          - resources:
+              kinds:
+              - apps/v1/DaemonSet
+              - apps/v1/Deployment
+              - batch/v1/Job
+              - apps/v1/ReplicaSet
+              - v1/ReplicationController
+              - apps/v1/StatefulSet
+              namespaces:
+              - demo
+          resources: {}
+        name: autogen-only-internal-harbor
+        skipBackgroundRequests: true
+        validate:
+          allowExistingViolations: true
+          message: Namespace demo chỉ được chạy image từ harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh
+            (đã qua CI + Trust Engine).
+          pattern:
+            spec:
+              template:
+                spec:
+                  =(ephemeralContainers):
+                  - image: harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh*
+                  =(initContainers):
+                  - image: harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh*
+                  containers:
+                  - image: harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh*
+      - match:
+          any:
+          - resources:
+              kinds:
+              - batch/v1/CronJob
+              namespaces:
+              - demo
+          resources: {}
+        name: autogen-cronjob-only-internal-harbor
+        skipBackgroundRequests: true
+        validate:
+          allowExistingViolations: true
+          message: Namespace demo chỉ được chạy image từ harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh
+            (đã qua CI + Trust Engine).
+          pattern:
+            spec:
+              jobTemplate:
+                spec:
+                  template:
+                    spec:
+                      =(ephemeralContainers):
+                      - image: harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh*
+                      =(initContainers):
+                      - image: harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh*
+                      containers:
+                      - image: harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh*
+    conditions:
+    - lastTransitionTime: "2026-11-02T12:32:56Z"
+      message: Ready
+      reason: Succeeded
+      status: "True"
+      type: Ready
+    rulecount:
+      generate: 0
+      mutate: 0
+      validate: 1
+      verifyimages: 0
+    validatingadmissionpolicy:
+      generated: false
+      message: skip generating ValidatingAdmissionPolicy for non CEL rules.
+kind: List
+metadata:
+  resourceVersion: ""

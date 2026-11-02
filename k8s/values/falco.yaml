@@ -12,6 +12,7 @@ falcosidekick:
       minimumpriority: notice
     alertmanager:
       hostport: http://kps-alertmanager.monitoring.svc.cluster.local:9093
+      endpoint: /api/v2/alerts     # Alertmanager >= 0.27 đã bỏ /api/v1 (trả 410 Gone)
       minimumpriority: warning
       extralabels: "team:nt114"
 

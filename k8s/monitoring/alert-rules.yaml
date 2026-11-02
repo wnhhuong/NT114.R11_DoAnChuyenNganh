@@ -21,13 +21,15 @@ spec:
             summary: "Kyverno chặn triển khai artifact không đáng tin ({{ $labels.policy_name }})"
             description: "{{ $value }} lần bị chặn trong 5 phút ở namespace {{ $labels.resource_namespace }}."
         - alert: RolloutDegraded
-          expr: max by (namespace, name) (rollout_info{phase="Degraded"}) == 1
+          # Argo Rollouts v1.10: phase của rollout_info là Completed/Progressing/Paused/Abort/Error/Timeout
+          # (không có "Degraded"); namespace của Rollout nằm ở exported_namespace (namespace = của controller)
+          expr: max by (exported_namespace, name) (rollout_info{phase=~"Abort|Error|Degraded"}) == 1
           for: 30s
           labels:
             severity: critical
             team: nt114
           annotations:
-            summary: "Rollout {{ $labels.namespace }}/{{ $labels.name }} bị abort (canary không đạt)"
+            summary: "Rollout {{ $labels.exported_namespace }}/{{ $labels.name }} bị abort (canary không đạt)"
         - alert: DemoAppHighErrorRate
           expr: |
             sum(rate(http_server_requests_seconds_count{namespace="demo",status=~"5.."}[5m]))

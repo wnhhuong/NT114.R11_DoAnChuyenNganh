@@ -3,6 +3,7 @@ alloy           	monitoring      	1       	2026-11-02 19:07:59.360292962 +0700 +
 argo-rollouts   	argo-rollouts   	1       	2026-11-02 19:54:06.346173685 +0700 +07	deployed	argo-rollouts-2.43.8         	v1.10.1    
 argocd          	argocd          	1       	2026-11-02 19:54:28.293252979 +0700 +07	deployed	argo-cd-10.11.6              	v3.5.6     
 external-secrets	external-secrets	1       	2026-11-02 16:54:33.608460256 +0700 +07	deployed	external-secrets-2.14.0      	v2.14.0    
+falco           	falco           	2       	2026-11-02 20:38:56.505102853 +0700 +07	deployed	falco-9.2.2                  	0.45.2     
 harbor          	harbor          	1       	2026-11-02 19:09:32.203132355 +0700 +07	deployed	harbor-1.19.4                	2.15.4     
 kps             	monitoring      	1       	2026-11-02 19:05:15.19917919 +0700 +07 	deployed	kube-prometheus-stack-92.17.0	v0.94.2    
 kyverno         	kyverno         	1       	2026-11-02 19:31:05.495960618 +0700 +07	deployed	kyverno-3.9.2                	v1.19.2    
