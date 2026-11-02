@@ -1,0 +1,63 @@
+# Alloy (DaemonSet) thu 3 nguồn: log Pod, Kubernetes Event (gồm cả "Kyverno chặn"), audit log của API server
+alloy:
+  mounts:
+    varlog: true          # mount /var/log của node => đọc được /var/log/kubernetes/kube-apiserver-audit.log
+  configMap:
+    create: true
+    content: |
+      // ---------- 1. Log của mọi Pod ----------
+      discovery.kubernetes "pods" {
+        role = "pod"
+      }
+
+      discovery.relabel "pods" {
+        targets = discovery.kubernetes.pods.targets
+        rule {
+          source_labels = ["__meta_kubernetes_namespace"]
+          target_label  = "namespace"
+        }
+        rule {
+          source_labels = ["__meta_kubernetes_pod_name"]
+          target_label  = "pod"
+        }
+        rule {
+          source_labels = ["__meta_kubernetes_pod_container_name"]
+          target_label  = "container"
+        }
+        rule {
+          source_labels = ["__meta_kubernetes_pod_label_app"]
+          target_label  = "app"
+        }
+      }
+
+      loki.source.kubernetes "pods" {
+        targets    = discovery.relabel.pods.output
+        forward_to = [loki.write.default.receiver]
+      }
+
+      // ---------- 2. Kubernetes Events ----------
+      loki.source.kubernetes_events "events" {
+        job_name   = "kubernetes-events"
+        log_format = "json"
+        forward_to = [loki.write.default.receiver]
+      }
+
+      // ---------- 3. Audit log của kube-apiserver ----------
+      local.file_match "audit" {
+        path_targets = [{
+          "__path__" = "/var/log/kubernetes/kube-apiserver-audit.log",
+          "job"      = "kube-audit",
+        }]
+      }
+
+      loki.source.file "audit" {
+        targets    = local.file_match.audit.targets
+        forward_to = [loki.write.default.receiver]
+      }
+
+      // ---------- Đích ----------
+      loki.write "default" {
+        endpoint {
+          url = "http://loki-gateway.monitoring.svc.cluster.local/loki/api/v1/push"
+        }
+      }

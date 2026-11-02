@@ -1,0 +1,10 @@
+case	expected	got	ms	message
+GD3-25 hop le	ALLOW	ALLOW	10061	pod/admission-test-22519 
+GD3-26 lo hong	DENY	DENY	7148	Error from server: error when creating "STDIN": admission webhook "mutate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-31345 was blocked due to the following policies   require-trusted-artifac
+GD3-27 khong chu ky	DENY	DENY	1226	Error from server: error when creating "STDIN": admission webhook "mutate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-16977 was blocked due to the following policies   require-trusted-artifac
+GD3-28 khong provenance	DENY	DENY	8539	Error from server: error when creating "STDIN": admission webhook "mutate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-10643 was blocked due to the following policies   require-trusted-artifac
+GD3-29 policy strict	DENY	DENY	6093	Error from server: error when creating "STDIN": admission webhook "mutate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-19602 was blocked due to the following policies   require-trusted-artifac
+GD2-case1 chua qua engine	DENY	DENY	1068538	Error from server: error when creating "STDIN": admission webhook "mutate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-11959 was blocked due to the following policies   require-trusted-artifac
+Bo qua Harbor (GHCR)	DENY	DENY	368	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-19453 was blocked due to the following policies   restrict-image-regist
+Image Docker Hub	DENY	DENY	305	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-31480 was blocked due to the following policies   restrict-image-regist
+Dung tag thay digest	DENY	DENY	5056	Error from server: error when creating "STDIN": admission webhook "mutate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-22052 was blocked due to the following policies   require-trusted-artifac

@@ -1,0 +1,52 @@
+# Tên ngắn: service sẽ là kps-prometheus, kps-alertmanager (kiểm tra bằng kubectl get svc -n monitoring)
+fullnameOverride: kps
+
+# kind không mở metric của các thành phần control-plane ra ngoài => tắt để tránh cảnh báo giả
+kubeEtcd: { enabled: false }
+kubeControllerManager: { enabled: false }
+kubeScheduler: { enabled: false }
+kubeProxy: { enabled: false }
+
+grafana:
+  admin:
+    existingSecret: grafana-admin
+    userKey: admin-user
+    passwordKey: admin-password
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      access: proxy
+      url: http://loki-gateway.monitoring.svc.cluster.local
+
+prometheus:
+  prometheusSpec:
+    retention: 7d
+    # Lấy MỌI ServiceMonitor/PodMonitor/PrometheusRule trong cluster, không chỉ của release này
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
+    resources:
+      requests: { cpu: 200m, memory: 512Mi }
+
+alertmanager:
+  alertmanagerSpec:
+    secrets: [alertmanager-discord]   # mount tại /etc/alertmanager/secrets/alertmanager-discord/
+  config:
+    global:
+      resolve_timeout: 5m
+    route:
+      receiver: "null"
+      group_by: ["alertname", "namespace"]
+      group_wait: 10s
+      group_interval: 1m
+      repeat_interval: 4h
+      routes:
+        # Chỉ gửi ra ngoài các cảnh báo của đồ án (label team=nt114), còn lại xem trên UI
+        - receiver: discord
+          matchers: ['team="nt114"']
+    receivers:
+      - name: "null"
+      - name: discord
+        discord_configs:
+          - webhook_url_file: /etc/alertmanager/secrets/alertmanager-discord/webhook-url
+            send_resolved: true

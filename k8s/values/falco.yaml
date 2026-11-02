@@ -1,0 +1,31 @@
+driver:
+  kind: modern_ebpf
+tty: true
+
+falcosidekick:
+  enabled: true
+  webui:
+    enabled: false
+  config:
+    loki:
+      hostport: http://loki-gateway.monitoring.svc.cluster.local
+      minimumpriority: notice
+    alertmanager:
+      hostport: http://kps-alertmanager.monitoring.svc.cluster.local:9093
+      minimumpriority: warning
+      extralabels: "team:nt114"
+
+customRules:
+  nt114-rules.yaml: |-
+    - rule: Package management in demo container
+      desc: >
+        Trình quản lý gói chạy trong container của namespace demo. Image đã được
+        Trust Engine đánh giá theo SBOM; cài thêm gói lúc chạy làm SBOM không còn đúng.
+      condition: >
+        spawned_process and container and k8s.ns.name = "demo"
+        and proc.name in (apk, apt, apt-get, pip, pip3, npm)
+      output: >
+        Package manager run in trusted workload
+        (cmd=%proc.cmdline user=%user.name pod=%k8s.pod.name image=%container.image.repository)
+      priority: WARNING
+      tags: [nt114, supply_chain]

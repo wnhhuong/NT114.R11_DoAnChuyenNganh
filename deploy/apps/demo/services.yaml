@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-app
+  labels: { app: demo-app, role: stable }
+spec:
+  selector: { app: demo-app }        # Argo Rollouts tự thêm pod-template-hash của bản stable
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-app-canary
+  labels: { app: demo-app, role: canary }
+spec:
+  selector: { app: demo-app }        # Argo Rollouts tự thêm pod-template-hash của bản canary
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http

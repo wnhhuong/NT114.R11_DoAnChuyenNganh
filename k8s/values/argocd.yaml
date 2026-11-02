@@ -1,0 +1,7 @@
+configs:
+  params:
+    server.insecure: true          # truy cập qua port-forward HTTP trong môi trường thực nghiệm
+  cm:
+    timeout.reconciliation: 60s    # poll Git mỗi 60s (mặc định 180s) để demo nhanh hơn
+dex:
+  enabled: false

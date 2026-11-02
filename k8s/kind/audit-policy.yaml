@@ -1,0 +1,27 @@
+# Audit policy cho kube-apiserver: đủ để truy vết ai tạo/sửa/xóa gì và request nào bị admission từ chối
+apiVersion: audit.k8s.io/v1
+kind: Policy
+omitStages: ["RequestReceived"]
+rules:
+  # Bỏ các nguồn sinh log nhiều nhưng không có giá trị audit
+  - level: None
+    users: ["system:kube-proxy"]
+  - level: None
+    resources:
+      - group: ""
+        resources: ["events"]
+      - group: "coordination.k8s.io"
+        resources: ["leases"]
+  - level: None
+    nonResourceURLs: ["/healthz*", "/readyz*", "/livez*", "/version", "/metrics", "/openapi*"]
+  # Secret/ConfigMap: chỉ ghi metadata, KHÔNG ghi nội dung
+  - level: Metadata
+    resources:
+      - group: ""
+        resources: ["secrets", "configmaps"]
+  # Thay đổi trong các namespace quan trọng: ghi cả request body
+  - level: Request
+    verbs: ["create", "update", "patch", "delete"]
+    namespaces: ["demo", "argocd", "kyverno", "harbor"]
+  # Mọi thứ còn lại: metadata
+  - level: Metadata

@@ -1,0 +1,37 @@
+name: deploy-policy
+
+# Mọi thay đổi trong deploy/ do người sửa tay đều phải qua OPA (conftest).
+# Commit của job promote dùng GITHUB_TOKEN nên không kích hoạt workflow này — promote tự chạy conftest.
+on:
+  push:
+    branches: [main]
+    paths: ["deploy/**"]
+  pull_request:
+    paths: ["deploy/**"]
+
+permissions:
+  contents: read
+
+jobs:
+  conftest:
+    name: OPA policy check for Kubernetes manifests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install conftest
+        env:
+          CONFTEST_VERSION: "0.62.0"
+        run: |
+          curl -sSfL "https://github.com/open-policy-agent/conftest/releases/download/v${CONFTEST_VERSION}/conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz" \
+            | tar -xz conftest
+          sudo mv conftest /usr/local/bin/conftest
+
+      - name: Unit test Rego policies
+        run: conftest verify --policy deploy/policy
+
+      - name: Render and check manifests
+        run: |
+          kubectl kustomize deploy/apps > rendered.yaml
+          conftest test --policy deploy/policy rendered.yaml

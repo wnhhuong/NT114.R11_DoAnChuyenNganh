@@ -1,0 +1,17 @@
+admissionController:
+  replicas: 1
+  container:
+    extraArgs:
+      allowInsecureRegistry: true    # Harbor chạy HTTP trong môi trường thực nghiệm
+  serviceMonitor:
+    enabled: true
+backgroundController:
+  replicas: 1
+  serviceMonitor:
+    enabled: true
+cleanupController:
+  replicas: 1
+reportsController:
+  replicas: 1
+  serviceMonitor:
+    enabled: true

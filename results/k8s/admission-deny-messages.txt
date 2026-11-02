@@ -1,0 +1,8 @@
+===== #26
+Trust Evaluation Engine không cho phép artifact này (decision != ALLOWED)'
+===== #27
+signature-and-trust-decision: 'failed to verify image harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh@sha256:d8dee24d9266c032d074fb3ee6f84dc1afc59ee898d3c3a2b2980b75ddd5de32: .attestors[0].entries[0].keyless: no signatures found'
+===== #28
+Trust Evaluation Engine không cho phép artifact này (decision != ALLOWED)'
+===== #tag
+Trust Evaluation Engine không cho phép artifact này (decision != ALLOWED)'

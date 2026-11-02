@@ -1,0 +1,31 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: restrict-image-registry
+  annotations:
+    policies.kyverno.io/title: Chỉ cho phép image của ứng dụng qua Harbor nội bộ
+    policies.kyverno.io/description: >-
+      Namespace demo chỉ được chạy image demo-app pull qua Harbor. Không có rule này,
+      image nằm ngoài imageReferences của require-trusted-artifact sẽ không bị verify.
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: only-internal-harbor
+      match:
+        any:
+          - resources:
+              kinds: [Pod]
+              namespaces: [demo]
+      validate:
+        message: >-
+          Namespace demo chỉ được chạy image từ
+          harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh (đã qua CI + Trust Engine).
+        pattern:
+          spec:
+            =(initContainers):
+              - image: "harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh*"
+            containers:
+              - image: "harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh*"
+            =(ephemeralContainers):
+              - image: "harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh*"

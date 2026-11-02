@@ -1,0 +1,33 @@
+# Harbor HTTP (không TLS) qua NodePort 30002. Service port = nodePort = 30002 để
+# cùng một địa chỉ harbor.nt114.local:30002 dùng được từ Windows (port mapping),
+# từ node (containerd) và từ Pod (CoreDNS) — xem scripts/k8s/harbor-dns.sh.
+expose:
+  type: nodePort
+  tls:
+    enabled: false
+  nodePort:
+    name: harbor
+    ports:
+      http:
+        port: 30002
+        nodePort: 30002
+externalURL: http://harbor.nt114.local:30002
+
+# Mật khẩu admin lấy từ Secret do External Secrets tạo (BƯỚC 2), không ghi trong values
+existingSecretAdminPassword: harbor-admin
+existingSecretAdminPasswordKey: HARBOR_ADMIN_PASSWORD
+
+persistence:
+  enabled: true
+  persistentVolumeClaim:
+    registry: { size: 10Gi }
+    database: { size: 2Gi }
+    redis: { size: 1Gi }
+    jobservice:
+      jobLog: { size: 1Gi }
+    trivy: { size: 5Gi }
+
+trivy:
+  enabled: true
+metrics:
+  enabled: true

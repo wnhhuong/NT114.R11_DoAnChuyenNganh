@@ -1,0 +1,59 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-trusted-artifact
+  annotations:
+    policies.kyverno.io/title: Chỉ triển khai artifact có Trust Decision ALLOWED
+    policies.kyverno.io/description: >-
+      Image phải ghim theo digest, có chữ ký keyless của secure-ci.yml@refs/heads/main và
+      có attestation trust-decision/v1 (do Trust Evaluation Engine sinh, ký bởi cùng workflow)
+      với decision == ALLOWED.
+spec:
+  validationFailureAction: Enforce
+  background: false
+  failurePolicy: Fail             # Kyverno lỗi/timeout => từ chối (fail-closed, giống engine)
+  webhookTimeoutSeconds: 30
+  rules:
+    - name: signature-and-trust-decision
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+                - argoproj.io/v1alpha1/Rollout
+              namespaces: [demo]
+      imageExtractors:
+        Rollout:
+          - path: /spec/template/spec/containers/*/image
+      verifyImages:
+        - imageReferences:
+            - "harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh*"
+          required: true
+          mutateDigest: false
+          verifyDigest: true       # tag (có thể bị trỏ sang image khác) => từ chối
+          attestors:
+            - entries:
+                - keyless:
+                    subject: "https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh/.github/workflows/secure-ci.yml@refs/heads/main"
+                    issuer: "https://token.actions.githubusercontent.com"
+                    rekor:
+                      url: https://rekor.sigstore.dev
+          attestations:
+            - type: https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh/trust-decision/v1
+              attestors:
+                - entries:
+                    - keyless:
+                        subject: "https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh/.github/workflows/secure-ci.yml@refs/heads/main"
+                        issuer: "https://token.actions.githubusercontent.com"
+                        rekor:
+                          url: https://rekor.sigstore.dev
+              conditions:
+                - all:
+                    - key: "{{ schema }}"
+                      operator: Equals
+                      value: trust-decision/v1
+                      message: "Attestation không đúng schema trust-decision/v1"
+                    - key: "{{ decision }}"
+                      operator: Equals
+                      value: ALLOWED
+                      message: "Trust Evaluation Engine không cho phép artifact này (decision != ALLOWED)"

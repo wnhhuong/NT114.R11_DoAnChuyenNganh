@@ -1,0 +1,40 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: nt114-supply-chain
+  namespace: monitoring
+spec:
+  groups:
+    - name: nt114.supply-chain
+      rules:
+        - alert: UntrustedArtifactBlocked
+          expr: |
+            sum by (policy_name, resource_namespace) (
+              increase(kyverno_policy_results_total{
+                policy_name=~"require-trusted-artifact|restrict-image-registry",
+                rule_result="fail"}[5m])
+            ) > 0
+          labels:
+            severity: warning
+            team: nt114
+          annotations:
+            summary: "Kyverno chặn triển khai artifact không đáng tin ({{ $labels.policy_name }})"
+            description: "{{ $value }} lần bị chặn trong 5 phút ở namespace {{ $labels.resource_namespace }}."
+        - alert: RolloutDegraded
+          expr: max by (namespace, name) (rollout_info{phase="Degraded"}) == 1
+          for: 30s
+          labels:
+            severity: critical
+            team: nt114
+          annotations:
+            summary: "Rollout {{ $labels.namespace }}/{{ $labels.name }} bị abort (canary không đạt)"
+        - alert: DemoAppHighErrorRate
+          expr: |
+            sum(rate(http_server_requests_seconds_count{namespace="demo",status=~"5.."}[5m]))
+            / sum(rate(http_server_requests_seconds_count{namespace="demo"}[5m])) > 0.1
+          for: 2m
+          labels:
+            severity: warning
+            team: nt114
+          annotations:
+            summary: "demo-app có tỉ lệ lỗi 5xx > 10%"

@@ -1,0 +1,20 @@
+# Canary chỉ được lên 100% khi tỉ lệ thành công của /hello trên bản canary >= 95%.
+# Không có dữ liệu => điều kiện sai => thất bại (fail-closed, giống Trust Engine).
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: success-rate
+spec:
+  metrics:
+    - name: success-rate
+      interval: 20s
+      count: 3
+      failureLimit: 1
+      successCondition: len(result) > 0 && result[0] >= 0.95
+      provider:
+        prometheus:
+          address: http://kps-prometheus.monitoring.svc.cluster.local:9090
+          query: |
+            sum(rate(http_server_requests_seconds_count{namespace="demo",service="demo-app-canary",uri="/hello",status!~"5.."}[1m]))
+            /
+            sum(rate(http_server_requests_seconds_count{namespace="demo",service="demo-app-canary",uri="/hello"}[1m]))

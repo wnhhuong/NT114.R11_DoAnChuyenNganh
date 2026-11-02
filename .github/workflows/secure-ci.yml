@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - "deploy/**"
+      - "k8s/**"
   workflow_dispatch:
     inputs:
       skip_sign:
@@ -444,3 +447,79 @@ jobs:
         run: |
           cosign attest --yes --type "$PREDICATE_TYPE" \
             --predicate decision.json "$IMAGE@$DIGEST"
+
+  # MỚI (tuần 10-12): chỉ image được Trust Engine ALLOWED mới được ghi vào manifest GitOps.
+  # Argo CD (trong cluster) đọc deploy/ và triển khai; Kyverno kiểm tra lại decision đã ký.
+  promote:
+    name: Promote ALLOWED image to GitOps manifests
+    needs:
+      - build-sign
+      - trust-evaluation
+      - attest-decision
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.trust-evaluation.outputs.decision == 'ALLOWED' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: promote-main
+      cancel-in-progress: false
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Download trust decision
+        uses: actions/download-artifact@v4
+        with:
+          name: trust-decision
+          path: decision
+
+      - name: Install conftest
+        env:
+          CONFTEST_VERSION: "0.62.0"
+        run: |
+          curl -sSfL "https://github.com/open-policy-agent/conftest/releases/download/v${CONFTEST_VERSION}/conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz" \
+            | tar -xz conftest
+          sudo mv conftest /usr/local/bin/conftest
+
+      - name: Update image digest and release info
+        env:
+          DIGEST: ${{ needs.build-sign.outputs.digest }}
+          SOURCE_IMAGE: ${{ needs.build-sign.outputs.image }}
+        run: |
+          set -euo pipefail
+          yq -i '(.images[] | select(.name == "demo-app")).digest = strenv(DIGEST)' deploy/apps/demo/kustomization.yaml
+          HARBOR_IMAGE=$(yq '.images[] | select(.name == "demo-app") | .newName' deploy/apps/demo/kustomization.yaml)
+          jq -r --arg img "$HARBOR_IMAGE@$DIGEST" --arg src "$SOURCE_IMAGE@$DIGEST" \
+                --arg run "$GITHUB_RUN_ID" --arg commit "$GITHUB_SHA" '
+            "IMAGE_REF=\($img)",
+            "SOURCE_IMAGE=\($src)",
+            "RUN_ID=\($run)",
+            "COMMIT=\($commit)",
+            "DECISION=\(.decision)",
+            "TRUST_SCORE=\(.trust_score)",
+            "POLICY_NAME=\(.policy.name)",
+            "POLICY_SHA256=\(.policy.sha256)"' decision/decision.json > deploy/apps/audit/release.env
+          cat deploy/apps/audit/release.env
+
+      - name: Check manifests with OPA (conftest)
+        run: |
+          conftest verify --policy deploy/policy
+          kubectl kustomize deploy/apps > rendered.yaml
+          conftest test --policy deploy/policy rendered.yaml
+
+      - name: Commit and push manifest change
+        env:
+          DIGEST: ${{ needs.build-sign.outputs.digest }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add deploy/apps/demo/kustomization.yaml deploy/apps/audit/release.env
+          if git diff --cached --quiet; then
+            echo "Manifest đã trỏ đúng digest, không cần commit"
+            exit 0
+          fi
+          git commit -m "chore(deploy): promote ${DIGEST:7:12} from run ${GITHUB_RUN_ID} [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:main

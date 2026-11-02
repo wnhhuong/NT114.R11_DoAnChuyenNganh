@@ -1,0 +1,50 @@
+# Argo CD PostSync hook: sau mỗi lần triển khai thành công, verify lại decision attestation của
+# đúng digest vừa chạy và in 1 dòng JSON ra stdout => Alloy => Loki (bằng chứng audit:
+# "digest X được triển khai theo quyết định Y, policy Z").
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: trust-audit
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      labels: { app: trust-audit }
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: audit
+          image: alpine:3.22
+          envFrom:
+            - configMapRef:
+                name: release-info
+          env:
+            - name: PREDICATE_TYPE
+              value: https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh/trust-decision/v1
+            - name: IDENTITY
+              value: https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh/.github/workflows/secure-ci.yml@refs/heads/main
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -eu
+              apk add --no-cache -q cosign jq >/dev/null
+              if out=$(cosign verify-attestation --allow-http-registry \
+                    --type "$PREDICATE_TYPE" \
+                    --certificate-identity "$IDENTITY" \
+                    --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+                    "$IMAGE_REF" 2>/dev/null); then
+                echo "$out" | jq -c --arg run "$RUN_ID" --arg commit "$COMMIT" '
+                  .payload | @base64d | fromjson | .predicate
+                  | {event: "trust-decision-audit", verified: true, run_id: $run, commit: $commit,
+                     digest: .artifact.digest, decision, trust_score,
+                     policy: .policy.name, policy_sha256: .policy.sha256,
+                     violations: [.violations[].id]}'
+              else
+                jq -nc --arg img "$IMAGE_REF" '{event: "trust-decision-audit", verified: false, image: $img}'
+                exit 1
+              fi
+          resources:
+            limits: { memory: 128Mi }

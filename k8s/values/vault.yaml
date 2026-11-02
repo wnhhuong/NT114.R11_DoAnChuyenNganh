@@ -1,0 +1,14 @@
+# HashiCorp Vault 1 Pod, dev mode (lưu trong RAM, tự unseal) — đủ cho môi trường thực nghiệm.
+# Root token do scripts/k8s/vault-bootstrap.sh sinh ngẫu nhiên lúc cài, không ghi trong file này.
+server:
+  dev:
+    enabled: true
+  dataStorage:
+    enabled: false
+  resources:
+    requests: { cpu: 50m, memory: 128Mi }
+    limits: { memory: 256Mi }
+injector:
+  enabled: false
+ui:
+  enabled: true

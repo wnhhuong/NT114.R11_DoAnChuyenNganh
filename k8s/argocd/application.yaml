@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nt114-demo
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh.git
+    targetRevision: main
+    path: deploy/apps
+  destination:
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true            # ai sửa tay trên cluster => Argo CD đưa về đúng Git
+    retry:
+      limit: 5
+      backoff:
+        duration: 30s
+        factor: 2
+        maxDuration: 5m

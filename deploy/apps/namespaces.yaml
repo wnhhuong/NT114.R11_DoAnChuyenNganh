@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo
+  labels:
+    # Pod Security Admission có sẵn của K8s: chặn Pod root/privileged ở mức namespace
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/warn: restricted
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: audit
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: loadgen

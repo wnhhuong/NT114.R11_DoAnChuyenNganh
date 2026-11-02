@@ -1,0 +1,43 @@
+# Cluster 1 node cho đồ án. __AUDIT_POLICY__ được create-cluster.sh thay bằng đường dẫn tuyệt đối.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: nt114
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      - containerPort: 30002        # Harbor (NodePort) -> http://harbor.nt114.local:30002 trên Windows
+        hostPort: 30002
+        listenAddress: "127.0.0.1"
+        protocol: TCP
+    extraMounts:
+      - hostPath: __AUDIT_POLICY__
+        containerPath: /etc/kubernetes/policies/audit-policy.yaml
+        readOnly: true
+    kubeadmConfigPatches:
+      - |
+        kind: ClusterConfiguration
+        apiServer:
+          extraArgs:
+            - name: audit-log-path
+              value: /var/log/kubernetes/kube-apiserver-audit.log
+            - name: audit-policy-file
+              value: /etc/kubernetes/policies/audit-policy.yaml
+            - name: audit-log-maxsize
+              value: "50"
+            - name: audit-log-maxbackup
+              value: "2"
+          extraVolumes:
+            - name: audit-policies
+              hostPath: /etc/kubernetes/policies
+              mountPath: /etc/kubernetes/policies
+              readOnly: true
+              pathType: DirectoryOrCreate
+            - name: audit-logs
+              hostPath: /var/log/kubernetes
+              mountPath: /var/log/kubernetes
+              readOnly: false
+              pathType: DirectoryOrCreate
+containerdConfigPatches:
+  - |-
+    [plugins."io.containerd.grpc.v1.cri".registry]
+      config_path = "/etc/containerd/certs.d"
