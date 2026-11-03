@@ -1,0 +1,15 @@
+# K4–K7: Kyverno admission (server-side dry-run) — chạy lại 2026-11-03 sau khi cluster khởi động lại
+Lệnh: scripts/k8s/test-admission.sh 1  → kết quả đầy đủ ở K4-K7-admission.tsv
+
+| # | Kịch bản | Case trong script | Kỳ vọng | Kết quả | ms | Policy chặn |
+|---|---|---|---|---|---|---|
+| —  | Đối chứng hợp lệ      | GD3-25 hop le              | ALLOW | ALLOW | 5053 | — |
+| K4 | Không chữ ký          | GD3-27 khong chu ky        | DENY  | DENY  | 1154 | require-trusted-artifact (signature) |
+| K5 | Không provenance      | GD3-28 khong provenance    | DENY  | DENY  | 2435 | require-trusted-artifact (decision) |
+| K6 | Image chưa qua engine | GD2-case1 chua qua engine  | DENY  | DENY  | 2399 | require-trusted-artifact (thiếu attestation) |
+| K7 | Bỏ qua Harbor (GHCR)  | Bo qua Harbor (GHCR)       | DENY  | DENY  |  278 | restrict-image-registry |
+| K7 | Image Docker Hub      | Image Docker Hub           | DENY  | DENY  |  264 | restrict-image-registry |
+
+Các case thêm (không thuộc K4–K7): GD3-26 lỗ hổng DENY (3803 ms), GD3-29 policy strict DENY (2474 ms), dùng tag thay digest DENY (3466 ms).
+9/9 case đúng kỳ vọng, khớp với lần chạy 2026-11-02 (admission-table.tsv).
+Hai case K7 bị chặn nhanh (~0.3s) vì restrict-image-registry chỉ so chuỗi registry, không cần gọi tới Harbor/Rekor để xác minh chữ ký.
