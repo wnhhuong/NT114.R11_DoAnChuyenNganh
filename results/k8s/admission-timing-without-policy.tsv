@@ -1,0 +1,181 @@
+case	expected	got	ms	message
+GD3-25 hop le	ALLOW	ALLOW	270	pod/admission-test-11349 
+GD3-25 hop le	ALLOW	ALLOW	241	pod/admission-test-6647 
+GD3-25 hop le	ALLOW	ALLOW	298	pod/admission-test-7789 
+GD3-25 hop le	ALLOW	ALLOW	256	pod/admission-test-14261 
+GD3-25 hop le	ALLOW	ALLOW	283	pod/admission-test-21553 
+GD3-25 hop le	ALLOW	ALLOW	218	pod/admission-test-3549 
+GD3-25 hop le	ALLOW	ALLOW	264	pod/admission-test-20766 
+GD3-25 hop le	ALLOW	ALLOW	192	pod/admission-test-6496 
+GD3-25 hop le	ALLOW	ALLOW	269	pod/admission-test-10293 
+GD3-25 hop le	ALLOW	ALLOW	284	pod/admission-test-21275 
+GD3-25 hop le	ALLOW	ALLOW	277	pod/admission-test-14004 
+GD3-25 hop le	ALLOW	ALLOW	266	pod/admission-test-17276 
+GD3-25 hop le	ALLOW	ALLOW	271	pod/admission-test-795 
+GD3-25 hop le	ALLOW	ALLOW	240	pod/admission-test-19680 
+GD3-25 hop le	ALLOW	ALLOW	251	pod/admission-test-4907 
+GD3-25 hop le	ALLOW	ALLOW	229	pod/admission-test-3205 
+GD3-25 hop le	ALLOW	ALLOW	241	pod/admission-test-31781 
+GD3-25 hop le	ALLOW	ALLOW	232	pod/admission-test-1759 
+GD3-25 hop le	ALLOW	ALLOW	255	pod/admission-test-21604 
+GD3-25 hop le	ALLOW	ALLOW	192	pod/admission-test-6522 
+GD3-26 lo hong	DENY	ALLOW	240	pod/admission-test-26791 
+GD3-26 lo hong	DENY	ALLOW	248	pod/admission-test-17147 
+GD3-26 lo hong	DENY	ALLOW	269	pod/admission-test-26915 
+GD3-26 lo hong	DENY	ALLOW	262	pod/admission-test-15820 
+GD3-26 lo hong	DENY	ALLOW	251	pod/admission-test-27129 
+GD3-26 lo hong	DENY	ALLOW	199	pod/admission-test-30712 
+GD3-26 lo hong	DENY	ALLOW	270	pod/admission-test-28061 
+GD3-26 lo hong	DENY	ALLOW	229	pod/admission-test-23449 
+GD3-26 lo hong	DENY	ALLOW	286	pod/admission-test-28372 
+GD3-26 lo hong	DENY	ALLOW	268	pod/admission-test-32451 
+GD3-26 lo hong	DENY	ALLOW	268	pod/admission-test-4508 
+GD3-26 lo hong	DENY	ALLOW	188	pod/admission-test-18823 
+GD3-26 lo hong	DENY	ALLOW	261	pod/admission-test-11652 
+GD3-26 lo hong	DENY	ALLOW	278	pod/admission-test-28614 
+GD3-26 lo hong	DENY	ALLOW	260	pod/admission-test-4977 
+GD3-26 lo hong	DENY	ALLOW	290	pod/admission-test-8864 
+GD3-26 lo hong	DENY	ALLOW	300	pod/admission-test-18674 
+GD3-26 lo hong	DENY	ALLOW	288	pod/admission-test-29493 
+GD3-26 lo hong	DENY	ALLOW	361	pod/admission-test-308 
+GD3-26 lo hong	DENY	ALLOW	288	pod/admission-test-21015 
+GD3-27 khong chu ky	DENY	ALLOW	279	pod/admission-test-21116 
+GD3-27 khong chu ky	DENY	ALLOW	268	pod/admission-test-24513 
+GD3-27 khong chu ky	DENY	ALLOW	263	pod/admission-test-24349 
+GD3-27 khong chu ky	DENY	ALLOW	279	pod/admission-test-31262 
+GD3-27 khong chu ky	DENY	ALLOW	254	pod/admission-test-31891 
+GD3-27 khong chu ky	DENY	ALLOW	256	pod/admission-test-14374 
+GD3-27 khong chu ky	DENY	ALLOW	272	pod/admission-test-25721 
+GD3-27 khong chu ky	DENY	ALLOW	263	pod/admission-test-27050 
+GD3-27 khong chu ky	DENY	ALLOW	251	pod/admission-test-780 
+GD3-27 khong chu ky	DENY	ALLOW	301	pod/admission-test-20646 
+GD3-27 khong chu ky	DENY	ALLOW	275	pod/admission-test-13701 
+GD3-27 khong chu ky	DENY	ALLOW	258	pod/admission-test-13047 
+GD3-27 khong chu ky	DENY	ALLOW	276	pod/admission-test-6225 
+GD3-27 khong chu ky	DENY	ALLOW	311	pod/admission-test-23831 
+GD3-27 khong chu ky	DENY	ALLOW	285	pod/admission-test-1298 
+GD3-27 khong chu ky	DENY	ALLOW	898	pod/admission-test-27246 
+GD3-27 khong chu ky	DENY	ALLOW	1092	pod/admission-test-23217 
+GD3-27 khong chu ky	DENY	ALLOW	271	pod/admission-test-19054 
+GD3-27 khong chu ky	DENY	ALLOW	274	pod/admission-test-5700 
+GD3-27 khong chu ky	DENY	ALLOW	296	pod/admission-test-30354 
+GD3-28 khong provenance	DENY	ALLOW	232	pod/admission-test-16775 
+GD3-28 khong provenance	DENY	ALLOW	285	pod/admission-test-26239 
+GD3-28 khong provenance	DENY	ALLOW	247	pod/admission-test-1335 
+GD3-28 khong provenance	DENY	ALLOW	288	pod/admission-test-26794 
+GD3-28 khong provenance	DENY	ALLOW	280	pod/admission-test-18218 
+GD3-28 khong provenance	DENY	ALLOW	267	pod/admission-test-17718 
+GD3-28 khong provenance	DENY	ALLOW	264	pod/admission-test-29319 
+GD3-28 khong provenance	DENY	ALLOW	265	pod/admission-test-7627 
+GD3-28 khong provenance	DENY	ALLOW	263	pod/admission-test-26536 
+GD3-28 khong provenance	DENY	ALLOW	201	pod/admission-test-12810 
+GD3-28 khong provenance	DENY	ALLOW	308	pod/admission-test-4883 
+GD3-28 khong provenance	DENY	ALLOW	297	pod/admission-test-16773 
+GD3-28 khong provenance	DENY	ALLOW	269	pod/admission-test-1387 
+GD3-28 khong provenance	DENY	ALLOW	238	pod/admission-test-29528 
+GD3-28 khong provenance	DENY	ALLOW	267	pod/admission-test-21380 
+GD3-28 khong provenance	DENY	ALLOW	273	pod/admission-test-15969 
+GD3-28 khong provenance	DENY	ALLOW	297	pod/admission-test-916 
+GD3-28 khong provenance	DENY	ALLOW	371	pod/admission-test-9715 
+GD3-28 khong provenance	DENY	ALLOW	282	pod/admission-test-22741 
+GD3-28 khong provenance	DENY	ALLOW	303	pod/admission-test-4128 
+GD3-29 policy strict	DENY	ALLOW	249	pod/admission-test-14912 
+GD3-29 policy strict	DENY	ALLOW	194	pod/admission-test-20115 
+GD3-29 policy strict	DENY	ALLOW	266	pod/admission-test-21702 
+GD3-29 policy strict	DENY	ALLOW	266	pod/admission-test-20386 
+GD3-29 policy strict	DENY	ALLOW	286	pod/admission-test-3382 
+GD3-29 policy strict	DENY	ALLOW	262	pod/admission-test-11559 
+GD3-29 policy strict	DENY	ALLOW	263	pod/admission-test-16887 
+GD3-29 policy strict	DENY	ALLOW	265	pod/admission-test-22721 
+GD3-29 policy strict	DENY	ALLOW	276	pod/admission-test-23277 
+GD3-29 policy strict	DENY	ALLOW	281	pod/admission-test-20449 
+GD3-29 policy strict	DENY	ALLOW	276	pod/admission-test-27823 
+GD3-29 policy strict	DENY	ALLOW	254	pod/admission-test-13476 
+GD3-29 policy strict	DENY	ALLOW	291	pod/admission-test-2366 
+GD3-29 policy strict	DENY	ALLOW	261	pod/admission-test-25685 
+GD3-29 policy strict	DENY	ALLOW	269	pod/admission-test-319 
+GD3-29 policy strict	DENY	ALLOW	290	pod/admission-test-2252 
+GD3-29 policy strict	DENY	ALLOW	287	pod/admission-test-15378 
+GD3-29 policy strict	DENY	ALLOW	303	pod/admission-test-12321 
+GD3-29 policy strict	DENY	ALLOW	272	pod/admission-test-4720 
+GD3-29 policy strict	DENY	ALLOW	261	pod/admission-test-30477 
+GD2-case1 chua qua engine	DENY	ALLOW	291	pod/admission-test-21025 
+GD2-case1 chua qua engine	DENY	ALLOW	305	pod/admission-test-5751 
+GD2-case1 chua qua engine	DENY	ALLOW	246	pod/admission-test-24556 
+GD2-case1 chua qua engine	DENY	ALLOW	279	pod/admission-test-1360 
+GD2-case1 chua qua engine	DENY	ALLOW	213	pod/admission-test-14577 
+GD2-case1 chua qua engine	DENY	ALLOW	265	pod/admission-test-17737 
+GD2-case1 chua qua engine	DENY	ALLOW	256	pod/admission-test-22348 
+GD2-case1 chua qua engine	DENY	ALLOW	282	pod/admission-test-8563 
+GD2-case1 chua qua engine	DENY	ALLOW	285	pod/admission-test-30380 
+GD2-case1 chua qua engine	DENY	ALLOW	267	pod/admission-test-26712 
+GD2-case1 chua qua engine	DENY	ALLOW	270	pod/admission-test-27308 
+GD2-case1 chua qua engine	DENY	ALLOW	297	pod/admission-test-17307 
+GD2-case1 chua qua engine	DENY	ALLOW	278	pod/admission-test-5394 
+GD2-case1 chua qua engine	DENY	ALLOW	243	pod/admission-test-28887 
+GD2-case1 chua qua engine	DENY	ALLOW	278	pod/admission-test-3475 
+GD2-case1 chua qua engine	DENY	ALLOW	295	pod/admission-test-22884 
+GD2-case1 chua qua engine	DENY	ALLOW	248	pod/admission-test-2172 
+GD2-case1 chua qua engine	DENY	ALLOW	254	pod/admission-test-26929 
+GD2-case1 chua qua engine	DENY	ALLOW	269	pod/admission-test-12050 
+GD2-case1 chua qua engine	DENY	ALLOW	252	pod/admission-test-11264 
+Bo qua Harbor (GHCR)	DENY	DENY	264	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-20272 was blocked due to the following policies   restrict-image-regist
+Bo qua Harbor (GHCR)	DENY	DENY	263	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-8564 was blocked due to the following policies   restrict-image-registr
+Bo qua Harbor (GHCR)	DENY	DENY	299	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-1722 was blocked due to the following policies   restrict-image-registr
+Bo qua Harbor (GHCR)	DENY	DENY	240	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-2023 was blocked due to the following policies   restrict-image-registr
+Bo qua Harbor (GHCR)	DENY	DENY	246	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-4300 was blocked due to the following policies   restrict-image-registr
+Bo qua Harbor (GHCR)	DENY	DENY	257	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-23938 was blocked due to the following policies   restrict-image-regist
+Bo qua Harbor (GHCR)	DENY	DENY	259	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-14757 was blocked due to the following policies   restrict-image-regist
+Bo qua Harbor (GHCR)	DENY	DENY	267	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-22589 was blocked due to the following policies   restrict-image-regist
+Bo qua Harbor (GHCR)	DENY	DENY	212	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-32708 was blocked due to the following policies   restrict-image-regist
+Bo qua Harbor (GHCR)	DENY	DENY	297	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-14719 was blocked due to the following policies   restrict-image-regist
+Bo qua Harbor (GHCR)	DENY	DENY	272	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-4930 was blocked due to the following policies   restrict-image-registr
+Bo qua Harbor (GHCR)	DENY	DENY	225	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-12452 was blocked due to the following policies   restrict-image-regist
+Bo qua Harbor (GHCR)	DENY	DENY	248	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-3640 was blocked due to the following policies   restrict-image-registr
+Bo qua Harbor (GHCR)	DENY	DENY	308	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-7109 was blocked due to the following policies   restrict-image-registr
+Bo qua Harbor (GHCR)	DENY	DENY	268	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-6002 was blocked due to the following policies   restrict-image-registr
+Bo qua Harbor (GHCR)	DENY	DENY	245	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-5647 was blocked due to the following policies   restrict-image-registr
+Bo qua Harbor (GHCR)	DENY	DENY	324	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-3271 was blocked due to the following policies   restrict-image-registr
+Bo qua Harbor (GHCR)	DENY	DENY	282	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-17401 was blocked due to the following policies   restrict-image-regist
+Bo qua Harbor (GHCR)	DENY	DENY	254	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-1103 was blocked due to the following policies   restrict-image-registr
+Bo qua Harbor (GHCR)	DENY	DENY	240	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-16036 was blocked due to the following policies   restrict-image-regist
+Image Docker Hub	DENY	DENY	330	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-6168 was blocked due to the following policies   restrict-image-registr
+Image Docker Hub	DENY	DENY	262	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-8200 was blocked due to the following policies   restrict-image-registr
+Image Docker Hub	DENY	DENY	267	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-6566 was blocked due to the following policies   restrict-image-registr
+Image Docker Hub	DENY	DENY	273	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-13363 was blocked due to the following policies   restrict-image-regist
+Image Docker Hub	DENY	DENY	285	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-8148 was blocked due to the following policies   restrict-image-registr
+Image Docker Hub	DENY	DENY	288	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-30003 was blocked due to the following policies   restrict-image-regist
+Image Docker Hub	DENY	DENY	324	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-23345 was blocked due to the following policies   restrict-image-regist
+Image Docker Hub	DENY	DENY	3958	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-776 was blocked due to the following policies   restrict-image-registry
+Image Docker Hub	DENY	DENY	354	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-8207 was blocked due to the following policies   restrict-image-registr
+Image Docker Hub	DENY	DENY	973	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-4567 was blocked due to the following policies   restrict-image-registr
+Image Docker Hub	DENY	DENY	1110	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-16887 was blocked due to the following policies   restrict-image-regist
+Image Docker Hub	DENY	DENY	278	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-13213 was blocked due to the following policies   restrict-image-regist
+Image Docker Hub	DENY	DENY	273	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-12877 was blocked due to the following policies   restrict-image-regist
+Image Docker Hub	DENY	DENY	287	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-14774 was blocked due to the following policies   restrict-image-regist
+Image Docker Hub	DENY	DENY	266	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-11210 was blocked due to the following policies   restrict-image-regist
+Image Docker Hub	DENY	DENY	302	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-31240 was blocked due to the following policies   restrict-image-regist
+Image Docker Hub	DENY	DENY	321	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-6493 was blocked due to the following policies   restrict-image-registr
+Image Docker Hub	DENY	DENY	275	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-4038 was blocked due to the following policies   restrict-image-registr
+Image Docker Hub	DENY	DENY	278	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-32386 was blocked due to the following policies   restrict-image-regist
+Image Docker Hub	DENY	DENY	282	Error from server: error when creating "STDIN": admission webhook "validate.kyverno.svc-fail" denied the request:   resource Pod/demo/admission-test-18197 was blocked due to the following policies   restrict-image-regist
+Dung tag thay digest	DENY	ALLOW	280	pod/admission-test-769 
+Dung tag thay digest	DENY	ALLOW	276	pod/admission-test-27364 
+Dung tag thay digest	DENY	ALLOW	298	pod/admission-test-21795 
+Dung tag thay digest	DENY	ALLOW	329	pod/admission-test-17388 
+Dung tag thay digest	DENY	ALLOW	250	pod/admission-test-15921 
+Dung tag thay digest	DENY	ALLOW	272	pod/admission-test-30872 
+Dung tag thay digest	DENY	ALLOW	332	pod/admission-test-2392 
+Dung tag thay digest	DENY	ALLOW	356	pod/admission-test-275 
+Dung tag thay digest	DENY	ALLOW	311	pod/admission-test-14337 
+Dung tag thay digest	DENY	ALLOW	283	pod/admission-test-27260 
+Dung tag thay digest	DENY	ALLOW	281	pod/admission-test-880 
+Dung tag thay digest	DENY	ALLOW	549	pod/admission-test-14093 
+Dung tag thay digest	DENY	ALLOW	272	pod/admission-test-28525 
+Dung tag thay digest	DENY	ALLOW	284	pod/admission-test-19425 
+Dung tag thay digest	DENY	ALLOW	278	pod/admission-test-28332 
+Dung tag thay digest	DENY	ALLOW	268	pod/admission-test-6929 
+Dung tag thay digest	DENY	ALLOW	274	pod/admission-test-25681 
+Dung tag thay digest	DENY	ALLOW	248	pod/admission-test-1094 
+Dung tag thay digest	DENY	ALLOW	275	pod/admission-test-4106 
+Dung tag thay digest	DENY	ALLOW	217	pod/admission-test-30996 

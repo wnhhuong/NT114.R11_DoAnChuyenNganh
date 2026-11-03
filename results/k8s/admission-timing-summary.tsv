@@ -1,0 +1,30 @@
+case	expected	match	first_ms	avg_rest_ms	min	max
+GD3-25 hop le	ALLOW	20/20	8852	5878	5222	7203
+GD3-26 lo hong	DENY	20/20	2852	3163	2818	4436
+GD3-27 khong chu ky	DENY	20/20	1456	1566	1316	2977
+GD3-28 khong provenance	DENY	20/20	3067	3206	2768	5243
+GD3-29 policy strict	DENY	20/20	3136	3002	2418	4428
+GD2-case1 chua qua engine	DENY	20/20	2486	2797	2418	4212
+Bo qua Harbor (GHCR)	DENY	20/20	293	255	196	306
+Image Docker Hub	DENY	20/20	262	246	178	282
+Dung tag thay digest	DENY	20/20	3716	3542	3234	4829
+
+# Không có require-trusted-artifact (chỉ restrict-image-registry):
+case	expected	match	first_ms	avg_rest_ms	min	max
+GD3-25 hop le	ALLOW	20/20	270	250	192	298
+GD3-26 lo hong	DENY	0/20	240	267	188	361
+GD3-27 khong chu ky	DENY	0/20	279	350	251	1092
+GD3-28 khong provenance	DENY	0/20	232	277	201	371
+GD3-29 policy strict	DENY	0/20	249	270	194	303
+GD2-case1 chua qua engine	DENY	0/20	291	267	213	305
+Bo qua Harbor (GHCR)	DENY	20/20	264	263	212	324
+Image Docker Hub	DENY	20/20	330	561	262	3958
+Dung tag thay digest	DENY	0/20	280	298	217	549
+
+# Ghi chú (2026-11-02, cluster kind 1 node, WSL2; mỗi case 20 lần, server-side dry-run):
+# - Có verify: image qua Harbor mất ~1,5–6 s (gọi Harbor/GHCR + Rekor để verify chữ ký và attestation);
+#   case bị restrict-image-registry chặn trước verify chỉ ~0,25 s.
+# - "Lần đầu" và "các lần sau" gần như bằng nhau: log Kyverno ghi "caching disabled: entry declares a gate
+#   evaluated against the request" => policy có conditions trên attestation nên Kyverno không cache kết quả verify.
+# - Không có require-trusted-artifact: mọi case ~0,25 s, nhưng 6/9 image xấu (#26–#29, GĐ2, tag) được cho qua.
+#   => overhead ~3–5 s mỗi lần tạo Pod/Rollout là cái giá của việc thực thi quyết định của Trust Engine.

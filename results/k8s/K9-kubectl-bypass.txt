@@ -1,0 +1,18 @@
+# K9: kubectl sửa tay Rollout, bỏ qua Argo CD — 2026-11-02T14:01:31Z
+Trước: harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh@sha256:6350c4087814378fb94a5f1101bc5f5b0c01dbe1ad44ad6ccf64696706c6e99a
+
+## (a) Digest #26 (decision BLOCKED, có chữ ký):
+admission webhook "mutate.kyverno.svc-fail" denied | require-trusted-artifact | Trust Evaluation Engine không cho phép artifact này (decision != ALLOWED)
+(3296 ms)
+## (b) Digest #27 (không chữ ký):
+admission webhook "mutate.kyverno.svc-fail" denied no signatures found
+## (c) Image Docker Hub (nginx): Rollout được nhận, nhưng Pod bị chặn ở lớp Pod + Argo CD selfHeal
+rollout.argoproj.io/demo-app patched 
+
+replicaset/demo-app-7d978659b8 validate.kyverno.svc-fail
+
+Sau: harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh@sha256:6350c4087814378fb94a5f1101bc5f5b0c01dbe1ad44ad6ccf64696706c6e99a
+Argo CD: Synced/Healthy, lần sync gần nhất 2026-11-02T14:01:37Z
+Pod đang chạy:
+demo-app-86465b957-5rfd8   1/1   Running   0     32m
+demo-app-86465b957-n28ts   1/1   Running   0     30m

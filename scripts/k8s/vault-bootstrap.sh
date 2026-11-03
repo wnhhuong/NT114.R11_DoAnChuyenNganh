@@ -4,8 +4,10 @@
 # khởi động lại (dev mode lưu trong RAM). Secret không bao giờ được in ra hay ghi vào file.
 #
 # Usage: scripts/k8s/vault-bootstrap.sh
-#        ROTATE=1 scripts/k8s/vault-bootstrap.sh                 # xoay vòng mật khẩu (kịch bản K12)
-#        DISCORD_WEBHOOK_URL=... scripts/k8s/vault-bootstrap.sh  # đặt webhook Discord thật
+#        DISCORD_WEBHOOK_URL=... scripts/k8s/vault-bootstrap.sh  # đặt/xoay vòng webhook Discord (kịch bản K12)
+#        ROTATE=1 scripts/k8s/vault-bootstrap.sh                 # sinh lại mật khẩu Harbor/Grafana
+# Lưu ý ROTATE=1: Harbor và Grafana chỉ đọc mật khẩu admin ở lần khởi động đầu (lưu vào DB), nên K8s Secret
+# đổi nhưng mật khẩu đăng nhập thì không — phải đổi thêm trong ứng dụng. K12 vì vậy xoay vòng webhook Discord.
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 NS=vault
