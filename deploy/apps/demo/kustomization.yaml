@@ -11,4 +11,4 @@ images:
   # Giá trị ban đầu = run #25 của GĐ3 (ALLOWED).
   - name: demo-app
     newName: harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh
-    digest: sha256:70c63a8534d679e04ac5299d01005d39dcacca00b5254d2d8c32e9207b7fc3a9
+    digest: sha256:9afdcaaaca11e80deeb9dd9388f80db8f6aba8c270d2d0176b3e0b2880884c2b
