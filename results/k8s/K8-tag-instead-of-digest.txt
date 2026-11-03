@@ -1,0 +1,20 @@
+# K8: Manifest dùng tag thay digest → conftest (OPA) chặn — 2026-11-03T07:56:48Z
+Cách tạo: PR #1 (nhánh test/k8-tag-instead-of-digest), deploy/apps/demo/kustomization.yaml: digest → newTag: latest
+Làm qua PR, không push thẳng main: deploy-policy chỉ làm CI đỏ, không ngăn Argo CD sync những gì đã vào main.
+
+## Manifest sau khi render (kubectl kustomize deploy/apps)
+image: harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh:latest
+
+## deploy-policy run 41599695708 (pull_request): failure, 19s
+https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh/actions/runs/41599695708
+FAIL - rendered.yaml - main - Rollout/demo-app: image "harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh:latest" phải ghim theo digest (@sha256:...), không dùng tag
+66 tests, 65 passed, 0 warnings, 1 failure, 0 exceptions
+
+## PR checks
+OPA policy check for Kubernetes manifests   fail   11s
+
+## Cluster không bị ảnh hưởng
+argocd: 33d4f3a03d8027bab91a93757e007895145eea4c Synced Healthy
+rollout: Healthy ...@sha256:983923528412bdff5f145d1edf055db3b3787decbd909f40fc6e9cf39739d40e
+
+PR đóng, không merge.
