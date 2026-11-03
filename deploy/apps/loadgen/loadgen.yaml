@@ -16,10 +16,12 @@ spec:
           image: curlimages/curl:8.11.1
           command: ["/bin/sh", "-c"]
           args:
+            # Có timeout: khi rollout scale down, kết nối tới pod vừa bị xoá có thể treo
+            # và làm cả vòng lặp đứng, canary không còn traffic để analysis đo
             - |
               while true; do
-                curl -s -o /dev/null http://demo-app.demo.svc:8080/hello
-                curl -s -o /dev/null http://demo-app-canary.demo.svc:8080/hello
+                curl -s -o /dev/null --connect-timeout 1 --max-time 2 http://demo-app.demo.svc:8080/hello
+                curl -s -o /dev/null --connect-timeout 1 --max-time 2 http://demo-app-canary.demo.svc:8080/hello
                 sleep 0.2
               done
           resources:
