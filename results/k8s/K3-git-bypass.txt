@@ -1,0 +1,29 @@
+# K3: Ghim thẳng digest BLOCKED vào Git, vượt qua CI — 2026-11-03T07:41:59Z
+Commit: 6212817 (deploy/apps/demo/kustomization.yaml: digest → #26)
+Digest #26 (có chữ ký, Trust Engine BLOCKED): harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh@sha256:23fe5d29b9a08a8539b9c4ae24e8ed1f8b9e9034cb231f8ad5533c75ff460231
+Trước: harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh@sha256:983923528412bdff5f145d1edf055db3b3787decbd909f40fc6e9cf39739d40e
+
+## (1) CI
+deploy-policy (conftest) run 41598041140: success (cấu hình đúng: Harbor + ghim digest)
+secure-ci: không chạy (chỉ đổi deploy/), không có Trust Engine nào được gọi
+
+## (2) Argo CD sync — thất bại
+target revision: 62128174c1a49d340e3228594fbbfe063c327f31 | sync: OutOfSync | health: Healthy
+Rollout demo demo-app SyncFailed | admission webhook "mutate.kyverno.svc-fail" denied the request:
+resource Rollout/demo/demo-app was blocked due to the following policies
+require-trusted-artifact:
+  signature-and-trust-decision: 'image attestations verification failed, verifiedCount: 0, requiredCount: 1,
+  error: .attestations[0].attestors[0].entries[0].keyless: attestation checks failed for ...@sha256:23fe5d29...
+  and predicate https://github.com/wnhhuong/NT114.R11_DoAnChuyenNganh/trust-decision/v1:
+  Trust Evaluation Engine không cho phép artifact này (decision != ALLOWED)'
+
+## (3) Kubernetes Event
+PolicyViolation clusterpolicy/require-trusted-artifact  Rollout demo/demo-app: [signature-and-trust-decision] fail (blocked)
+
+## (4) Image vẫn chạy (không đổi)
+demo-app-676c5586f7-qpkgx  ...@sha256:983923528412bdff5f145d1edf055db3b3787decbd909f40fc6e9cf39739d40e
+demo-app-676c5586f7-rs4w2  ...@sha256:983923528412bdff5f145d1edf055db3b3787decbd909f40fc6e9cf39739d40e
+
+## (5) Alert
+UntrustedArtifactBlocked firing activeAt=2026-11-03T07:44:13Z policy=require-trusted-artifact namespace=demo
+Thời gian push → alert firing: ~2m14s (push 07:41:59Z, sync bị chặn ~07:42:18Z)
