@@ -1,0 +1,29 @@
+# K10: Canary lỗi 50% → analysis thất bại → Rollout tự abort, giữ bản stable — 2026-11-03T04:42:38Z
+Commit kích hoạt: fc0371d (DEMO_ERROR_RATE=0.5), image canary đã promote ở 27c5fc2; Argo CD sync tại f34deca
+Stable: harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh@sha256:70c63a8534d679e04ac5299d01005d39dcacca00b5254d2d8c32e9207b7fc3a9
+Canary: harbor.nt114.local:30002/ghcr/wnhhuong/nt114.r11_doanchuyennganh@sha256:9afdcaaaca11e80deeb9dd9388f80db8f6aba8c270d2d0176b3e0b2880884c2b
+
+## Diễn biến (loadgen gọi liên tục cả demo-app và demo-app-canary)
+11:43:06 SetWeight 50, pause 30s      canary /hello: 500=7   200=11
+11:43:35 bắt đầu analysis             canary /hello: 500=78  200=67
+11:43:57 Degraded (abort)             canary /hello: 500=115 200=108
+
+## AnalysisRun demo-app-769bbf8c78-10-2.2 (successCondition: result[0] >= 0.95, failureLimit 1)
+Failed value=[0.8144183295790806] 2026-11-03T04:43:33Z
+Failed value=[0.48076087279802515] 2026-11-03T04:43:54Z
+(lần đo đầu 0.81 vì cửa sổ rate[1m] còn lẫn số liệu của pod stable trước khi canary service chuyển selector)
+
+## Kết quả
+RolloutAborted: Rollout aborted update to revision 10: Step-based analysis phase error/failed: Metric "success-rate" assessed Failed due to failed (2) > failureLimit (1)
+Thời gian từ lúc canary nhận traffic tới lúc abort: ~51s
+Pod sau abort (stable 58c7b96b77 được scale lại 2 replica):
+demo-app-58c7b96b77-8lxmx   1/1   Running
+demo-app-58c7b96b77-fnbgn   1/1   Running
+
+## Alert
+RolloutDegraded firing activeAt=2026-11-03T04:44:13Z rollout=demo-app
+(rule: max by (exported_namespace, name) (rollout_info{phase=~"Abort|Error|Degraded"}) == 1, for 30s)
+
+## Ghi chú
+Hai lần chạy trước (AnalysisRun 10-2, 10-2.1) bị loại: curl trong loadgen không có timeout, treo ở kết nối
+tới pod stable vừa bị scale down nên canary không có traffic (giá trị NaN). Đã sửa ở f34deca (--connect-timeout 1 --max-time 2).

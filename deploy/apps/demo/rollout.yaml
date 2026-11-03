@@ -30,7 +30,7 @@ spec:
               containerPort: 8080
           env:
             - name: DEMO_ERROR_RATE
-              value: "0.5"
+              value: "0"
             - name: JAVA_TOOL_OPTIONS
               value: "-XX:MaxRAMPercentage=75"
           resources:
